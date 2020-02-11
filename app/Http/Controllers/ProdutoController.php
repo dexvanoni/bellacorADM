@@ -34,6 +34,14 @@ class ProdutoController extends Controller
     {
         $nome_produto = $i;
         $qtn = $q;
+
+        $insumos = DB::table('insumos')->where('insumo', $nome_produto)->get();
+
+        if ($insumos->isEmpty()) {
+            $insumo = new Insumo;
+            $insumo->insumo = $nome_produto;
+            $insumo->save();
+        } 
         return view('produtos.create', compact('nome_produto', 'qtn'));
     }
 

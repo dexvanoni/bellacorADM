@@ -28,7 +28,8 @@ class CompraController extends Controller
     {
         $produtos = Produto::all();
         $compras = Compra::all();
-        return view('compras.index', compact('compras', 'produtos'));
+        $insumos = Insumo::all();
+        return view('compras.index', compact('compras', 'produtos', 'insumos'));
     }
 
     /**

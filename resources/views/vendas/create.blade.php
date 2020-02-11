@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="container" style="width: 900px">
-  <form action="{{ route('compras.store') }}" method="POST">
+  <form action="{{ route('vendas.store') }}" method="POST">
      @csrf
     <div class="row">
         <div class="col">
-            <center><h4>NOVA COMPRA</h4></center>
+            <center><h4>NOVA VENDA</h4></center>
         </div>
     </div>
     <hr>
@@ -16,42 +16,10 @@
        <label for="item">Item</label>
       <select id="item" class="form-control" name="item">
         <option>Selecione...</option>
-        <option value="CANECA PORCELANA 325ml BRANCA ORCA">CANECA PORCELANA 325ml BRANCA ORCA</option>
-        <option value="CANECA PORCELANA 325ml COR INTERNA ORCA">CANECA PORCELANA 325ml COR INTERNA ORCA</option>
-        <option value="CANECA PORCELANA 325ml COR INTERNA COM COLHER">CANECA PORCELANA 325ml COR INTERNA COM COLHER</option>
-        <option value="CANECA PORCELANA 325ml COR INTERNA ALÇA BOLA">CANECA PORCELANA 325ml COR INTERNA ALÇA BOLA</option>
-        <option value="CANECA PORCELANA 300ml COR INTERNA QUADRADA">CANECA PORCELANA 300ml COR INTERNA QUADRADA</option>
-        <option value="CANECA PORCELANA 325ml COLORIDA COM TARJA LIVE">CANECA PORCELANA 325ml COLORIDA COM TARJA LIVE </option>
-        <option value="CANECA MÁGICA COLORIDA 325ml">CANECA MÁGICA COLORIDA 325ml</option>
-        <option value="CANECA CHOPP VIDRO JATEADO 450ml ORCA">CANECA CHOPP VIDRO JATEADO 450ml ORCA</option>
-        <option value="CANECA CHOPP VIDRO JATEADO 325ml ORCA">CANECA CHOPP VIDRO JATEADO 325ml ORCA</option>
-        <option value="CANECA CHOPP VIDRO LISO 450ml">CANECA CHOPP VIDRO LISO 450ml</option>
-        <option value="CANECA CHOPP VIDRO LISO 325ml">CANECA CHOPP VIDRO LISO 325ml</option>
-        <option value="CANECA ALUMÍNIO 350ml">CANECA ALUMÍNIO 350ml</option>
-        <option value="CANECA ALUMÍNIO 450ml">CANECA ALUMÍNIO 450ml</option>
-        <option value="CANECA ALUMÍNIO 500ml">CANECA ALUMÍNIO 500ml</option>
-        <option value="CANECA ALUMÍNIO 650ml">CANECA ALUMÍNIO 650ml</option>
-        <option value="CANECA ALUMÍNIO 750ml">CANECA ALUMÍNIO 750ml</option>
-        <option value="CANECA ALUMÍNIO 850ml">CANECA ALUMÍNIO 850ml</option>
-        <option value="CANECA ALUMÍNIO BRANCA 450ml">CANECA ALUMÍNIO BRANCA 450ml</option>
-        <option value="CANECA ALUMÍNIO BRANCA 500ml">CANECA ALUMÍNIO BRANCA 500ml</option>
-        <option value="CANECA ALUMÍNIO BRANCA 650ml">CANECA ALUMÍNIO BRANCA 650ml</option>
-        <option value="CANECA ALUMÍNIO BRANCA 750ml">CANECA ALUMÍNIO BRANCA 750ml</option>
-        <option value="CANECA ALUMÍNIO BRANCA 850ml">CANECA ALUMÍNIO BRANCA 850ml</option>
-        <option value="SQUEEZE ALUMÍNIO TAMPA BOLA 500ml">SQUEEZE ALUMÍNIO TAMPA BOLA 500ml</option>
-        <option value="SQUEEZE ALUMÍNIO BRANCA TAMPA BOLA 500ml">SQUEEZE ALUMÍNIO BRANCA TAMPA BOLA 500ml</option>
-        <option value="TECIDO 100% POLIÉSTER BRANCO KG">TECIDO 100 POLIÉSTER BRANCO KG</option>
-        <option value="TECIDO 100% POLIÉSTER COLORIDO KG">TECIDO 100 POLIÉSTER COLORIDO KG</option>
-        <option value="TECIDO 96%/4% POL/ELAST BRANCO ALLURE KG">TECIDO 96-4 POL-ELAST BRANCO ALLURE KG</option>
-        <option value="TECIDO 96%/4% POL/ELAST COLORIDO ALLURE KG">TECIDO 96-4 POL-ELAST COLORIDO ALLURE KG</option>
-        <option value="TECIDO PV BRANCO KG">TECIDO PV BRANCO KG</option>
-        <option value="TECIDO PV COLORIDO KG">TECIDO PV COLORIDO KG</option>
-        <option value="TECIDO PA BRANCO KG">TECIDO PA BRANCO KG</option>
-        <option value="TECIDO PA COLORIDO KG">TECIDO PA COLORIDO KG</option>
-        <option value="RIBANA BRANCA KG">RIBANA BRANCA KG</option>
-        <option value="RIBANA COLORIDA KG">RIBANA COLORIDA KG</option>
-        <option value="BODY INFANTIL Suedine BRANCO Tam: RN">BODY INFANTIL Suedine BRANCO Tam: RN</option>
-        <option value="CAMISETA PP Tam. P LISA">CAMISETA PP Tam. P LISA</option>
+        <?php $insumos = DB::table('insumos')->orderBy('insumo')->get();?>
+        @foreach($insumos as $i)
+          <option value="{{$i->insumo}}">{{$i->insumo}}</option>
+        @endforeach
       </select>
     </div>
   </div>

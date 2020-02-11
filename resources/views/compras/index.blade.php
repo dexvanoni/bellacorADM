@@ -33,7 +33,7 @@ LISTA DE COMPRAS
                   @if($prod->isNotEmpty())
                     <i title="Este item existe na lista de produtos" class="fas fa-check" style="color: green"></i>
                     @else
-                    <a title="Adicionar este item na lista de produtos" href="{{ route('produtos.adicionar', ['i' => $i->item, 'q' => $i->quantidade]) }}" class="badge badge-success"><i class="fas fa-cart-plus"></i></a>
+                    <a title="Adicionar este item na lista de produtos e insumos?" href="{{ route('produtos.adicionar', ['i' => $i->item, 'q' => $i->quantidade]) }}" class="badge badge-success"><i class="fas fa-cart-plus"></i></a>
                   @endif
                 {{$i->item}}
               </td>

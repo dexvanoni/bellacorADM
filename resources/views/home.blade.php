@@ -6,8 +6,8 @@
 @section('content')
                   <div class="row justify-content-md-center">
                     <div class="col-8 col-offset-2">
-                        <center><h1>Gerenciamento Administrativo STAMP</h1></center>
-                        <center><img src="/imagens/logo.jpeg" width="300px" height="300px"></center>    
+                        
+                        <center><img src="/imagens/bellacor.jpeg" width="300px" height="100px"></center>    
                         <br>
                         <hr>
                         <table class="table table-striped table-bordered table-condensed table-hover">
