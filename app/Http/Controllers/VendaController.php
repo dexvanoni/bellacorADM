@@ -30,6 +30,14 @@ class VendaController extends Controller
         return view('vendas.index', compact('vendas'));
     }
 
+    public function rela()
+    {
+        
+        //$compras = Compra::all();
+        
+        return view('vendas.relatorio');
+    }
+
     public function pagou($i)
     {
         $vendas = Venda::find($i);
@@ -41,11 +49,33 @@ class VendaController extends Controller
         return redirect()->action('VendaController@index');
     }
 
+    public function pesquisa(Request $request)
+    {
+        $vendas = DB::table('vendas')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('situacao', "Realizado")
+                    ->where('pago', "S")
+                    ->get();
+        $inicio = $request->inicio;
+        $fim = $request->fim;
+
+        $fat_bruto = $vendas->sum('valor_pago');
+        $fat_liquido = $fat_bruto-$vendas->sum('custo');
+
+        return view('vendas.relatorio', compact('vendas', 'inicio', 'fim', 'fat_bruto', 'fat_liquido'));
+    }
+
     public function cancelar($i)
     {
         $vendas = Venda::find($i);
-        $vendas->delete();
         
+        $estoque = DB::table('produtos')->where('produto', $vendas->produto)->get();
+
+        DB::table('produtos')
+        ->where('produto', $vendas->produto)
+            ->update(['estoque' => $estoque[0]->estoque+$vendas->quantidade]);
+
+        $vendas->delete();
         return redirect()->action('VendaController@index');
     }
 
@@ -82,7 +112,26 @@ class VendaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $vendas = Venda::create($request->all());
+        
+        if (!is_null($request->rua)) {
+            $cliente = new Cliente;
+            $cliente->nome = $request->cliente;
+            $cliente->contato = $request->contato;
+            $cliente->doc = $request->doc;
+            $cliente->rua = $request->rua;
+            $cliente->numero = $request->numero;
+            $cliente->bairro = $request->bairro;
+            $cliente->save();      
+        }
+        
+       $estoque = DB::table('produtos')->where('produto', $request->produto)->get();
+
+        DB::table('produtos')
+        ->where('produto', $request->produto)
+            ->update(['estoque' => $estoque[0]->estoque-$request->quantidade]);
+
+        return redirect()->action('VendaController@index');
     }
 
     /**

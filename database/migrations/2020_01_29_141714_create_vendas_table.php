@@ -16,7 +16,7 @@ class CreateVendasTable extends Migration
         Schema::create('vendas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('produto');
-            $table->longText('quantidade');
+            $table->integer('quantidade');
             $table->string('cliente');
             $table->float('valor_cobrar');
             $table->float('valor_pago');

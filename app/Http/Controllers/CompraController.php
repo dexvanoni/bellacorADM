@@ -32,6 +32,14 @@ class CompraController extends Controller
         return view('compras.index', compact('compras', 'produtos', 'insumos'));
     }
 
+    public function rela()
+    {
+        
+        //$compras = Compra::all();
+        
+        return view('compras.relatorio');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -59,6 +67,18 @@ class CompraController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function pesquisa(Request $request)
+    {
+        $compras = DB::table('vendas')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('situacao', "Realizado")
+                    ->where('pago', "S")
+                    ->get();
+        $inicio = $request->inicio;
+        $fim = $request->fim;
+        return view('compras.relatorio', compact('compras', 'inicio', 'fim'));
+    }
+
     public function store(Request $request)
     {
         $compras = Compra::create($request->all());

@@ -30,19 +30,33 @@ class ProdutoController extends Controller
         return view('produtos.index', compact('produtos'));
     }
 
-    public function adicionar($i, $q)
+    public function adicionar($i, $q, $v)
     {
         $nome_produto = $i;
         $qtn = $q;
+        $valor = $v;
 
         $insumos = DB::table('insumos')->where('insumo', $nome_produto)->get();
+        //$produtos = DB::table('produtos')->where('produto', $nome_produto)->get();
 
+        /*if ($produtos->isEmpty()) {
+            $produto = new Produto;
+            $produto->produto = $nome_produto;
+            $produto->valor_custo = $valor/$qtn;
+            $produto->un = "Unidade";
+            $produto->valor_venda = ($valor/$qtn)*2;
+            $produto->tipo = "SUBLIMAÇÃO";
+            $produto->quem_comprou = "EMPRESA";
+            $produto->estoque = $qtn;
+            $produto->save();
+        }
+        */
         if ($insumos->isEmpty()) {
             $insumo = new Insumo;
             $insumo->insumo = $nome_produto;
             $insumo->save();
         } 
-        return view('produtos.create', compact('nome_produto', 'qtn'));
+        return view('produtos.create', compact('nome_produto', 'qtn', 'valor'));
     }
 
 

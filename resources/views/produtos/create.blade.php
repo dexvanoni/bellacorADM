@@ -55,7 +55,7 @@
   <div class="col-2">
     <div class="form-group">
       <label for="valor_custo">Valor de Custo</label>
-      <input type="text" class="form-control" id="valor_custo" name="valor_custo">
+      <input type="text" class="form-control" id="valor_custo" name="valor_custo" value="<?php if(isset($nome_produto)){ echo "R$ ".$valor/$qtn;}?>">
       </div>
   </div>
   <div class="col-3">

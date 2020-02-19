@@ -7,6 +7,8 @@ LISTA DE COMPRAS
     <div class="col">
         <center><h4>LISTA DE COMPRAS 
         	<a title="NOVA COMPRA" href="{{ route('compras.create') }}" class="badge badge-primary">+<i class="fas fa-money-bill-alt"></i></a></h4></center>
+          <a title="RELATÓRIO" href="{{ route('compras.rela') }}" class="badge badge-warning"><i class="fas fa-file-alt"></i></a></h4>
+
     </div>
 </div>
 <hr>
@@ -33,7 +35,7 @@ LISTA DE COMPRAS
                   @if($prod->isNotEmpty())
                     <i title="Este item existe na lista de produtos" class="fas fa-check" style="color: green"></i>
                     @else
-                    <a title="Adicionar este item na lista de produtos e insumos?" href="{{ route('produtos.adicionar', ['i' => $i->item, 'q' => $i->quantidade]) }}" class="badge badge-success"><i class="fas fa-cart-plus"></i></a>
+                    <a title="Adicionar este item na lista de produtos e insumos?" href="{{ route('produtos.adicionar', ['i' => $i->item, 'q' => $i->quantidade, 'v' => $i->valor_pago]) }}" class="badge badge-success"><i class="fas fa-cart-plus"></i></a>
                   @endif
                 {{$i->item}}
               </td>

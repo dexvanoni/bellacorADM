@@ -6,7 +6,8 @@ LISTA DE VENDAS
 <div class="row">
     <div class="col">
         <center><h4>LISTA DE VENDAS 
-        	<a title="NOVA VENDA" href="{{ route('vendas.create') }}" class="badge badge-primary">+<i class="fas fa-money-bill-alt"></i></a></h4></center>
+        	<a title="NOVA VENDA" href="{{ route('vendas.create') }}" class="badge badge-primary">+<i class="fas fa-money-bill-alt"></i></a>
+         <a title="RELATÓRIO" href="{{ route('vendas.rela') }}" class="badge badge-warning"><i class="fas fa-file-alt"></i></a></h4></center>
     </div>
 </div>
 <hr>
@@ -73,9 +74,13 @@ $a2 = DB::table('vendas')
     ->where('situacao', 'Realizado')
     ->sum('quantidade');
 
-        $agendado = DB::table('vendas')
+    $agendado = DB::table('vendas')
     ->whereMonth('created_at', $mes)
     ->where('situacao', 'Agendado')->count();
+
+    $clientes = App\Cliente::all();
+
+
 ?>
 <div style="border: solid">
 <div class="row">
@@ -135,8 +140,27 @@ $a2 = DB::table('vendas')
             <center><tr>
               <td style="width: 30%; text-align: center;" >{{$i->produto}}</td>
               <td style="width: 5%; text-align: center;" >{{$i->quantidade}}</td>
-              <td style="width: 10%; text-align: center;" >{{$i->cliente}}</td>
-              <td style="width: 5%; text-align: center;" >R$ {{$i->valor_pago}}</td>
+              <td style="width: 10%; text-align: center;" >
+                {{$i->cliente}}
+                <?php $contato = DB::table('clientes')->where('nome', $i->cliente)->get();?>
+                @if($contato->isNotEmpty())
+                <i title="<?php 
+                    foreach ($contato as $cont) {
+                      echo $cont->contato;
+                    }
+                  ?>" class="fas fa-mobile-alt"></i>
+                @endif
+              </td>
+              <td style="width: 5%; text-align: center;" >
+                R$ {{$i->valor_pago}}
+                @if($i->valor_entrada != 0 && $i->pago == 'N')
+                  <i title="Este cliente pagou entrada de R$ {{$i->valor_entrada}}" class="fas fa-exclamation-circle" style="color: green"></i>
+                @endif
+                @if($i->pago == 'S')
+                <?php $prod = DB::table('produtos')->where('produto', $i->produto)->get();?>
+                  <i title="Custo TOTAL: R$ {{($i->quantidade*$i->custo)+($prod[0]->valor_custo*$i->quantidade)}}&#013Lucro Líquido: R$ {{$i->valor_pago-(($i->quantidade*$i->custo)+($prod[0]->valor_custo*$i->quantidade))}}" class="fas fa-vote-yea" style="color: black"></i>
+                @endif
+              </td>
               <!--<td style="width: 15%; text-align: center;" >{{$i->forma_pagamento}}</td>-->
               <!--<td style="width: 5%; text-align: center;" >{{$i->num_parcelas}}</td>-->
               <!--<td style="width: 5%; text-align: center;" >R$ {{$i->valor_entrada}}</td>-->
@@ -186,5 +210,4 @@ $a2 = DB::table('vendas')
           @endforeach
         </tbody>
       </table>
-
 @endsection
