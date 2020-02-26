@@ -119,6 +119,9 @@ $a2 = DB::table('vendas')
 <table class="display nowrap" id="lista_vendas" style="font-size: 12px; width: 100%">
         <thead>
           <center><tr>
+            <th style="text-align: center;">
+              <a id="recibo_conjunto" title="GERAR RELATÓRIO CONJUNTO" href="#" class="badge badge-primary"><i class="fab fa-readme"></i></a>
+            </th>
             <th style="text-align: center;">Produtos</th>
             <th style="text-align: center;">Qtn</th>
             <th style="text-align: center;">Cliente</th>
@@ -138,6 +141,9 @@ $a2 = DB::table('vendas')
         <tbody>
           @foreach ($vendas as $i)
             <center><tr>
+              <td style="width: 3%; text-align: center;" >
+                <input type="checkbox" value="check_recibo[{{$i->id}}]" id="check_recibo" name="check_recibo">
+              </td>
               <td style="width: 30%; text-align: center;" >{{$i->produto}}</td>
               <td style="width: 5%; text-align: center;" >{{$i->quantidade}}</td>
               <td style="width: 10%; text-align: center;" >
@@ -157,8 +163,7 @@ $a2 = DB::table('vendas')
                   <i title="Este cliente pagou entrada de R$ {{$i->valor_entrada}}" class="fas fa-exclamation-circle" style="color: green"></i>
                 @endif
                 @if($i->pago == 'S')
-                <?php $prod = DB::table('produtos')->where('produto', $i->produto)->get();?>
-                  <i title="Custo TOTAL: R$ {{($i->quantidade*$i->custo)+($prod[0]->valor_custo*$i->quantidade)}}&#013Lucro Líquido: R$ {{$i->valor_pago-(($i->quantidade*$i->custo)+($prod[0]->valor_custo*$i->quantidade))}}" class="fas fa-vote-yea" style="color: black"></i>
+                  <i title="Custo TOTAL: R$ {{$i->custo}}&#013Lucro Líquido: R$ {{$i->valor_pago-$i->custo}}" class="fas fa-vote-yea" style="color: black"></i>
                 @endif
               </td>
               <!--<td style="width: 15%; text-align: center;" >{{$i->forma_pagamento}}</td>-->
@@ -210,4 +215,14 @@ $a2 = DB::table('vendas')
           @endforeach
         </tbody>
       </table>
+
+      <script type="text/javascript">
+        /*$(document).ready(function(){
+          $('#recibo_conjunto').hide();
+        });
+        var box = document.getElementsByName("check_recibo");
+              if (box.checked){
+                $('#recibo_conjunto').show();
+              }*/
+      </script>
 @endsection

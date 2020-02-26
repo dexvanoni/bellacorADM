@@ -51,18 +51,31 @@ class VendaController extends Controller
 
     public function pesquisa(Request $request)
     {
-        $vendas = DB::table('vendas')
+        if ($request->tipo == 'GERAL') {
+            $vendas = DB::table('vendas')
                     ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
                     ->where('situacao', "Realizado")
                     ->where('pago', "S")
                     ->get();
+                $conta = $vendas->count();
+        } else {
+            $vendas = DB::table('vendas')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('situacao', "Realizado")
+                    ->where('pago', "S")
+                    ->where('tipo', $request->tipo)
+                    ->get();
+            $conta = $vendas->count();
+        }
+               
         $inicio = $request->inicio;
         $fim = $request->fim;
+        $tp = $request->tipo;
 
         $fat_bruto = $vendas->sum('valor_pago');
         $fat_liquido = $fat_bruto-$vendas->sum('custo');
 
-        return view('vendas.relatorio', compact('vendas', 'inicio', 'fim', 'fat_bruto', 'fat_liquido'));
+        return view('vendas.relatorio', compact('vendas', 'inicio', 'fim', 'fat_bruto', 'fat_liquido', 'tp', 'conta'));
     }
 
     public function cancelar($i)
@@ -101,6 +114,7 @@ class VendaController extends Controller
      */
     public function create()
     {
+            
         return view('vendas.create');
     }
 
@@ -112,7 +126,43 @@ class VendaController extends Controller
      */
     public function store(Request $request)
     {
-        $vendas = Venda::create($request->all());
+
+            $total_valor = DB::table('compras')->where('item', $request->produto)->sum('valor_pago');
+              $total_itens = DB::table('compras')->where('item', $request->produto)->sum('quantidade');
+              
+              if ($total_valor != 0) {
+                $media = $total_valor/$total_itens;
+              } else {
+                $media = 'Este produto não foi adquirido';
+              }
+
+        if (!is_null($request->q)) {
+            $pecas = $request->q;
+        } else {
+            $pecas = 0;
+        }
+        
+        $vendas = new Venda;
+        $vendas->produto = $request->produto;
+        $vendas->quantidade = $request->quantidade;
+        $vendas->valor_pago = $request->valor_pago;
+        $vendas->dt_entrega = $request->dt_entrega;
+        $vendas->num_parcelas = $request->num_parcelas;
+        $vendas->forma_pagamento = $request->forma_pagamento;
+        $vendas->valor_entrada = $request->valor_entrada;
+        $vendas->pago = $request->pago;
+        $vendas->tipo = $request->tipo;
+        $vendas->cliente = $request->cliente;
+        $vendas->situacao = $request->situacao;
+        $vendas->entrega = $request->entrega;
+        if (is_null($request->q)) {
+            $vendas->custo = ($request->custo+$media)*$vendas->quantidade;
+            } else {
+                $vendas->custo = ($request->custo*$pecas)+($media*$vendas->quantidade);
+            }
+        $vendas->obs = $request->obs;
+        $vendas->save();
+        //$vendas = Venda::create($request->all());
         
         if (!is_null($request->rua)) {
             $cliente = new Cliente;

@@ -20,6 +20,7 @@ class Venda extends Model
         'dt_entrega',
         'pago',
         'custo',
+        'tipo',
 
     ];
 }
