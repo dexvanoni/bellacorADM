@@ -145,7 +145,13 @@ $a2 = DB::table('vendas')
                 <input type="checkbox" value="check_recibo[{{$i->id}}]" id="check_recibo" name="check_recibo">
               </td>
               <td style="width: 30%; text-align: center;" >{{$i->produto}}</td>
-              <td style="width: 5%; text-align: center;" >{{$i->quantidade}}</td>
+              <td style="width: 5%; text-align: center;" >
+                {{$i->quantidade}}
+                <?php $prod = DB::table('produtos')->where('produto', $i->produto)->sum('estoque')?>
+                @if($prod <= 0 && $i->situacao == 'Agendado')
+                  <i title="Este produto já está com estoque zerado ou negativo. Adquira mais deste item para concluir esta venda! Estoque: {{$prod}}" class="fas fa-exclamation-circle" style="color: red"></i>
+                @endif
+              </td>
               <td style="width: 10%; text-align: center;" >
                 {{$i->cliente}}
                 <?php $contato = DB::table('clientes')->where('nome', $i->cliente)->get();?>

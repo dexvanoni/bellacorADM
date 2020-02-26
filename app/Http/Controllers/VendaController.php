@@ -74,7 +74,8 @@ class VendaController extends Controller
 
         $fat_bruto = $vendas->sum('valor_pago');
         $fat_liquido = $fat_bruto-$vendas->sum('custo');
-
+        //dd($vendas);
+        //exit;
         return view('vendas.relatorio', compact('vendas', 'inicio', 'fim', 'fat_bruto', 'fat_liquido', 'tp', 'conta'));
     }
 

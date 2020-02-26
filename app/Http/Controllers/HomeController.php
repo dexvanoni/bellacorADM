@@ -62,8 +62,14 @@ class HomeController extends Controller
             ->where('situacao', '=', 'Agendado')
             ->get();
 
+        $total_compras = DB::table('compras')
+            ->whereMonth('created_at', $estemes)
+            ->sum('valor_pago');
+
             //dd($vendas);
             //exit;
-        return view('home', compact('vendas', 'vendas_realizadas', 'vendas_agendadas', 'liquido', 'lucro_liq'));
+
+            
+        return view('home', compact('vendas', 'vendas_realizadas', 'vendas_agendadas', 'liquido', 'lucro_liq', 'total_compras'));
     }
 }

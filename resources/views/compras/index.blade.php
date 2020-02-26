@@ -5,9 +5,9 @@ LISTA DE COMPRAS
 @section('content')
 <div class="row">
     <div class="col">
-        <center><h4>LISTA DE COMPRAS 
-        	<a title="NOVA COMPRA" href="{{ route('compras.create') }}" class="badge badge-primary">+<i class="fas fa-money-bill-alt"></i></a></h4></center>
-          <a title="RELATÓRIO" href="{{ route('compras.rela') }}" class="badge badge-warning"><i class="fas fa-file-alt"></i></a></h4>
+       <center><h4>LISTA DE COMPRAS 
+          <a title="NOVA VENDA" href="{{ route('compras.create') }}" class="badge badge-primary">+<i class="fas fa-money-bill-alt"></i></a>
+         <a title="RELATÓRIO" href="{{ route('compras.rela') }}" class="badge badge-warning"><i class="fas fa-file-alt"></i></a></h4></center>
 
     </div>
 </div>

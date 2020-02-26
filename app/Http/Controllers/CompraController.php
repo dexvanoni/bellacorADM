@@ -69,16 +69,28 @@ class CompraController extends Controller
      */
     public function pesquisa(Request $request)
     {
-        $compras = DB::table('vendas')
+        if ($request->tipo == 'GERAL') {
+            $vendas = DB::table('compras')
                     ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
-                    ->where('situacao', "Realizado")
-                    ->where('pago', "S")
                     ->get();
+                $conta = $vendas->count();
+        } else {
+            $vendas = DB::table('compras')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('tipo', $request->tipo)
+                    ->get();
+            $conta = $vendas->count();
+        }
+               
         $inicio = $request->inicio;
         $fim = $request->fim;
-        return view('compras.relatorio', compact('compras', 'inicio', 'fim'));
-    }
+        $tp = $request->tipo;
 
+        $total_compras = $vendas->sum('valor_pago');
+        
+        return view('compras.relatorio', compact('vendas', 'inicio', 'fim', 'tp', 'conta'));
+    }
+    
     public function store(Request $request)
     {
         $compras = Compra::create($request->all());

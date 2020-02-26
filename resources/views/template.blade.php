@@ -21,6 +21,23 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
+<style type="text/css">
+    @keyframes pisca {
+     0% { opacity: 1; }
+     50% { opacity: 0.5; }
+     100% { opacity: 0; }
+
+ }
+.pisca {
+    color: red;
+   -webkit-animation: pisca .75s linear infinite;
+   -moz-animation: pisca .75s linear infinite;
+   -ms-animation: pisca .75s linear infinite;
+   -o-animation: pisca .75s linear infinite;
+   animation: pisca .75s linear infinite;
+}
+</style>
+
 </head>
 <body>
     <div id="app">

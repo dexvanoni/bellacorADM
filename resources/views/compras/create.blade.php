@@ -56,7 +56,7 @@
       </select>
     </div>
   </div>
-<div class="col-5">
+<div class="col-2">
     <div class="form-group">
       <label for="fornecedor">Fornecedor</label>
       <input type="text" class="form-control" id="fornecedor" name="fornecedor">
@@ -71,6 +71,17 @@
         <option value="FABIANA">FABIANA</option>
         <option value="EMPRESA">EMPRESA</option>
       </select>
+    </div>
+  </div>
+    <div class="col">
+    <div class="form-group">
+       <label for="tipo">Tipo</label>
+        <select id="tipo" class="form-control" name="tipo" required>
+          <option>Selecione...</option>
+          <option value="SUBLIMAÇÃO">SUBLIMAÇÃO</option>
+          <option value="TRANSFER">TRANSFER</option>
+          <option value="BORDADO">BORDADO</option>
+        </select>
     </div>
   </div>
 </div>

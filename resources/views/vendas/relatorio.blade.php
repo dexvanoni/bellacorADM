@@ -46,6 +46,7 @@ RELATÓRIO DE VENDAS
 <hr>
 <!--TABELA COM O RELATÓRIO-->
 @isset($vendas)
+  @if($vendas->isNotEmpty())
 <table class="display nowrap" id="rela_vendas" style="font-size: 12px">
         <thead>
           <tr >Datas Pesquisadas: {{date('d/m/Y', strtotime($inicio))}} a {{date('d/m/Y', strtotime($fim))}}</tr>
@@ -138,5 +139,10 @@ RELATÓRIO DE VENDAS
 
 });
 </script>
+
+@else
+<tr >Datas Pesquisadas: {{date('d/m/Y', strtotime($inicio))}} a {{date('d/m/Y', strtotime($fim))}}</tr>
+<h3>NÃO EXISTE RELATÓRIO PARA ESTA PESQUISA</h3>
+@endif
 @endisset
 @endsection
