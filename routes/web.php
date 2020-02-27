@@ -44,3 +44,5 @@ Route::POST('compras_pesquisa', 'CompraController@pesquisa')->name('compras.pesq
 
 Route::get('vendas_rela', 'VendaController@rela')->name('vendas.rela')->middleware('auth');
 Route::POST('vendas_pesquisa', 'VendaController@pesquisa')->name('vendas.pesquisa')->middleware('auth');
+
+Route::POST('vendas_recibo_conjunto', 'VendaController@recibo_conjunto')->name('vendas.recibo_conjunto')->middleware('auth');

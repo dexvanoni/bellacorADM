@@ -73,12 +73,41 @@ class CompraController extends Controller
             $vendas = DB::table('compras')
                     ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
                     ->get();
-                $conta = $vendas->count();
+
+            $empresa = DB::table('compras')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('quem_pagou', 'EMPRESA')
+                    ->sum('valor_pago');
+            $denis = DB::table('compras')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('quem_pagou', 'DENIS')
+                    ->sum('valor_pago');
+            $renato = DB::table('compras')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('quem_pagou', 'RENATO')
+                    ->sum('valor_pago');
+                
+            $conta = $vendas->count();
+                
         } else {
             $vendas = DB::table('compras')
                     ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
                     ->where('tipo', $request->tipo)
                     ->get();
+
+            $empresa = DB::table('compras')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('quem_pagou', 'EMPRESA')
+                    ->sum('valor_pago');
+            $denis = DB::table('compras')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('quem_pagou', 'DENIS')
+                    ->sum('valor_pago');
+            $renato = DB::table('compras')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('quem_pagou', 'RENATO')
+                    ->sum('valor_pago');
+
             $conta = $vendas->count();
         }
                
@@ -88,7 +117,7 @@ class CompraController extends Controller
 
         $total_compras = $vendas->sum('valor_pago');
         
-        return view('compras.relatorio', compact('vendas', 'inicio', 'fim', 'tp', 'conta'));
+        return view('compras.relatorio', compact('vendas', 'inicio', 'fim', 'tp', 'conta', 'total_compras', 'empresa', 'denis', 'renato'));
     }
     
     public function store(Request $request)

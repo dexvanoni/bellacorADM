@@ -80,12 +80,19 @@
               <?php 
                   $hj = Carbon\Carbon::today('America/Campo_Grande');
                   $am = Carbon\Carbon::tomorrow('America/Campo_Grande');
+                  $on = Carbon\Carbon::yesterday('America/Campo_Grande');
                   $entregar = $i->dt_entrega.' 00:00:00';
               ?>
               <td style="width: 10%; text-align: center" >
                 {{date('d/m/Y', strtotime($i->dt_entrega))}}
                 @if($entregar == $am)
-                    <i title="ENTREGA AGENDADA PARA AMANHÃ!!" class="fas fa-exclamation-triangle pisca"></i>
+                    <i title="ENTREGA AGENDADA PARA AMANHÃ!!" class="fas fa-calendar-times pisca2"></i>
+                @endif
+                @if($entregar <= $on)
+                    <i title="ENTREGA ATRASADA!!" class="fas fa-exclamation-triangle pisca"></i>
+                @endif
+                @if($entregar == $hj)
+                    <i title="ENTREGAR HOJE!!" class="fas fa-calendar-check pisca3"></i>
                 @endif
               </td>
               <td style="width: 5%; text-align: center;" >

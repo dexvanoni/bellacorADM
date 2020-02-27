@@ -30,6 +30,22 @@ class VendaController extends Controller
         return view('vendas.index', compact('vendas'));
     }
 
+    public function recibo_conjunto(Request $request)
+    {
+      $ids = explode(',', $request->dados);
+      $itens = collect([]);
+      foreach ($ids as $key => $value) {
+        $vendas = Venda::find($value);
+        $itens->push($vendas);
+      }
+      
+      //echo $itens->sum('valor_pago');
+      //dd($itens);
+      //exit;
+      
+        return view('vendas.recibo_venda_conjunta', compact('itens'));
+    }
+
     public function rela()
     {
         

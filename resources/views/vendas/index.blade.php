@@ -3,6 +3,7 @@
 LISTA DE VENDAS
 @endsection
 @section('content')
+
 <div class="row">
     <div class="col">
         <center><h4>LISTA DE VENDAS 
@@ -120,7 +121,15 @@ $a2 = DB::table('vendas')
         <thead>
           <center><tr>
             <th style="text-align: center;">
-              <a id="recibo_conjunto" title="GERAR RELATÓRIO CONJUNTO" href="#" class="badge badge-primary"><i class="fab fa-readme"></i></a>
+
+              <form action="{{ route('vendas.recibo_conjunto')}}" method="POST">
+                 @csrf
+                 
+                <input type="hidden" name="dados" id="dados" value="">
+              <a id="recibos" title="GERAR RELATÓRIO CONJUNTO" class="badge badge-primary"><i class="fab fa-readme"></i></a>
+              <button type="submit" id="recibo_conjunto" title="ENVIAR RELATÓRIO CONJUNTO" class="badge badge-warning"><i class="fab fa-readme"></i></button>
+              </form>
+                    
             </th>
             <th style="text-align: center;">Produtos</th>
             <th style="text-align: center;">Qtn</th>
@@ -142,7 +151,9 @@ $a2 = DB::table('vendas')
           @foreach ($vendas as $i)
             <center><tr>
               <td style="width: 3%; text-align: center;" >
-                <input type="checkbox" value="check_recibo[{{$i->id}}]" id="check_recibo" name="check_recibo">
+                @if($i->situacao == 'Realizado' && $i->pago == 'S')
+                  <input type="checkbox" value="{{$i->id}}" id="check_recibo" name="check_recibo">
+                @endif
               </td>
               <td style="width: 30%; text-align: center;" >{{$i->produto}}</td>
               <td style="width: 5%; text-align: center;" >
@@ -221,14 +232,26 @@ $a2 = DB::table('vendas')
           @endforeach
         </tbody>
       </table>
-
       <script type="text/javascript">
-        /*$(document).ready(function(){
+        $( document ).ready(function() {
           $('#recibo_conjunto').hide();
         });
-        var box = document.getElementsByName("check_recibo");
-              if (box.checked){
-                $('#recibo_conjunto').show();
-              }*/
+
+                  //var ids = new Array();
+                      $('#recibos').on('click', function() { 
+                          var array = []; 
+                          $("input:checkbox[name=check_recibo]:checked").each(function() { 
+                              array.push($(this).val());
+                              //alert(array); 
+                              console.log(array);
+                               $('#recibo_conjunto').show();
+                          });
+                          
+                          $('#dados').val(array);
+                          //$('input:hidden[name=dados]').val(array);
+                          
+
+                      });
+
       </script>
 @endsection

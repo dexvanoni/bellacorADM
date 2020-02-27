@@ -47,42 +47,35 @@ RELATÓRIO DE COMPRAS
 <!--TABELA COM O RELATÓRIO-->
 @isset($vendas)
   @if($vendas->isNotEmpty())
-<table class="display nowrap" id="rela_vendas" style="font-size: 12px">
+<table class="display nowrap" id="rela_compras" style="font-size: 12px">
         <thead>
           <tr >Datas Pesquisadas: {{date('d/m/Y', strtotime($inicio))}} a {{date('d/m/Y', strtotime($fim))}}</tr>
           <center><tr>
-            <th style="text-align: center;">Produto</th>
+            <th style="text-align: center;">Material</th>
             <th style="text-align: center;">Qtn</th>
-            <th style="text-align: center;">Cliente</th>
-            <th style="text-align: center;">Contato</th>
-            <th style="text-align: center;">Valor Recebido</th>
-            <th style="text-align: center;">Custo</th>
-            <th style="text-align: center;">Dt. Pedido</th>
-            <th style="text-align: center;">Dt. Entrega</th>
-            <th style="text-align: center;">Forma PG</th>
-            <th style="text-align: center;">Entregador</th>
+            <th style="text-align: center;">Valor</th>
+            <th style="text-align: center;">Fornecedor</th>
+            <th style="text-align: center;">Pagador</th>
+            <th style="text-align: center;">Dt. Compra</th>
+            <th style="text-align: center;">Tipo</th>
           </tr></center>
         </thead>
         <tbody>
           @foreach ($vendas as $i)
             <center><tr>
               <td style="width: 25%; text-align: center;">
-                {{$i->produto}}
+                {{$i->item}}
               </td>
               <td style="width: 5%; text-align: center;" >
                 {{$i->quantidade}}
               </td>
-              <td style="width: 15%; text-align: center;" >{{$i->cliente}}</td>
+              <td style="width: 15%; text-align: center;" >R$ {{$i->valor_pago}}</td>
               <td style="width: 7%; text-align: center;" >
-                <?php $prod = DB::table('clientes')->where('nome', $i->cliente)->get()?>
-                {{$prod[0]->contato}}
+                {{$i->fornecedor}}
               </td>
-              <td style="width: 10%; text-align: center;" >R$ {{$i->valor_pago}}</td>
-              <td style="width: 10%; text-align: center;" >R$ {{$i->custo}}</td>
+              <td style="width: 10%; text-align: center;" >{{$i->quem_pagou}}</td>
               <td style="width: 10%; text-align: center;" >{{date('d/m/Y', strtotime($i->created_at))}}</td>
-              <td style="width: 10%; text-align: center;" >{{date('d/m/Y', strtotime($i->dt_entrega))}}</td>
-              <td style="width: 10%; text-align: center;" >{{$i->forma_pagamento}}</td>
-              <td style="width: 10%; text-align: center;" >{{$i->entrega}}</td>
+              <td style="width: 10%; text-align: center;" >{{$i->tipo}}</td>
             </tr></center>
           @endforeach
         </tbody>
@@ -95,10 +88,11 @@ RELATÓRIO DE COMPRAS
              var printCounter = 0;
              var data_i = "<?php echo date('d/m/Y', strtotime($inicio)); ?>";
              var data_f = "<?php echo date('d/m/Y', strtotime($fim)); ?>";
-             var fat_bru = "<?php echo $fat_bruto; ?>";
-             var fat_liq = "<?php echo $fat_liquido; ?>";
-             var porc_lucro = "<?php echo ($fat_liquido/$fat_bruto)*100; ?>";
              var tipo = "<?php echo $tp; ?>";
+             var total = "<?php echo $total_compras; ?>";
+             var empresa = "<?php echo $empresa; ?>";
+             var denis = "<?php echo $denis; ?>";
+             var renato = "<?php echo $renato; ?>";
              var ct = "<?php echo $conta; ?>";
              var dt = "<?php 
                 // Force locale
@@ -117,18 +111,18 @@ RELATÓRIO DE COMPRAS
                           // Append a caption to the table before the DataTables initialisation
             //$('#rela_vendas').append('<caption style="caption-side: bottom">A fictional company\'s staff table.</caption>');
 
-             $('#rela_vendas').DataTable( {
+             $('#rela_compras').DataTable( {
               dom: 'Bfrtip',
                   buttons: [
             {
                 extend: 'pdfHtml5',
                 messageBottom: '\n\n\n\n\n\nRelatório impresso em '+dat+' por '+quem,
                 messageTop: 
-                    'Datas Pesquisadas: '+data_i+'  e '+data_f+'\nFaturamento Bruto: R$ '+fat_bru+'\nFaturamento Líquido: R$ '+fat_liq+'\n Porcentagem de lucro médio: '+porc_lucro+'%\n Tipo de trabalho: '+tipo+'\n Número de pedidos: '+ct,
+                    'Datas Pesquisadas: '+data_i+'  e '+data_f+'\nValor Bruto Gasto: R$ '+total+'\n Tipo de trabalho: '+tipo+'\n Número de compras: '+ct+'\nValor gasto por EMPRESA: R$ '+empresa+'\nValor gasto por DENIS/FABIANA: R$ '+denis+'\nValor gasto por RENATO: R$ '+renato,
                 orientation: 'landscape',
                 pageSize: 'A4',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
                 }
             },
                 'colvis',

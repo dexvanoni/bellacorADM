@@ -36,6 +36,36 @@
    -o-animation: pisca .75s linear infinite;
    animation: pisca .75s linear infinite;
 }
+
+    @keyframes pisca2 {
+     0% { opacity: 1; }
+     50% { opacity: 0.5; }
+     100% { opacity: 0; }
+
+ }
+.pisca2 {
+    color: blue;
+   -webkit-animation: pisca2 .75s linear infinite;
+   -moz-animation: pisca2 .75s linear infinite;
+   -ms-animation: pisca2 .75s linear infinite;
+   -o-animation: pisca2 .75s linear infinite;
+   animation: pisca2 .75s linear infinite;
+}
+
+    @keyframes pisca3 {
+     0% { opacity: 1; }
+     50% { opacity: 0.5; }
+     100% { opacity: 0; }
+
+ }
+.pisca3 {
+    color: green;
+   -webkit-animation: pisca3 .75s linear infinite;
+   -moz-animation: pisca3 .75s linear infinite;
+   -ms-animation: pisca3 .75s linear infinite;
+   -o-animation: pisca3 .75s linear infinite;
+   animation: pisca3 .75s linear infinite;
+}
 </style>
 
 </head>
