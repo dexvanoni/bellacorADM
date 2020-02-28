@@ -26,7 +26,12 @@ LISTA DE PRODUTOS
         <tbody>
           @foreach ($produtos as $i)
             <center><tr>
-              <td style="width: 40%; text-align: center;" >{{ $i->produto }}</td>
+              <td style="width: 40%; text-align: center;" >
+                @if($i->obs == 'DUP')
+                  <i title="Este produto já está na lista de produtos e tem estoque proveniente de compras anteriores! A partir do próximo dia 05 os custos deste estoque antigo será zerado." class="fas fa-exclamation-circle" style="color: red"></i>
+                @endif
+                {{ $i->produto }}
+              </td>
               <td style="width: 15%; text-align: center;" >R$ {{$i->valor_venda}}</td>
               <td style="width: 15%; text-align: center;" >R$ 
                 <?php

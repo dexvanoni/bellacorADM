@@ -22,21 +22,50 @@
         @foreach($insumos as $i)
           <option value="{{$i->produto}}" label="
               <?php
-              $total_valor = DB::table('compras')->where('item', $i->produto)->sum('valor_pago');
-              $total_itens = DB::table('compras')->where('item', $i->produto)->sum('quantidade');
-              
-              if ($total_valor != 0) {
-                $media = $total_valor/$total_itens;
+              if ($i->obs != 'DUP'){
+
+                $total_valor = DB::table('compras')
+                              ->where('item', $i->produto)
+                              ->sum('valor_pago');
+                $total_itens = DB::table('compras')
+                              ->where('item', $i->produto)
+                              ->sum('quantidade');
+                  if ($total_valor != 0) {
+                    $media = $total_valor/$total_itens;
+                  } else {
+                    $media = 'Este produto não foi adquirido';
+                  }
+
               } else {
-                $media = 'Este produto não foi adquirido';
+
+                         // Force locale
+                /*date_default_timezone_set('America/Sao_Paulo');
+                setlocale(LC_ALL, 'pt_BR.utf-8', 'ptb', 'pt_BR', 'portuguese-brazil', 'portuguese-brazilian', 'bra', 'brazil', 'br');
+                setlocale(LC_TIME, 'pt_BR.utf-8', 'ptb', 'pt_BR', 'portuguese-brazil', 'portuguese-brazilian', 'bra', 'brazil', 'br');*/
+
+
+                // Create Carbon date
+                $dt = Carbon\Carbon::now();
+                
+                $data_compra = $i->created_at;
+                
+                $limite = $dt->year.'-'.$dt->month.'-05';
+                $media = 0;
               }
             ?>
-            " >{{$i->produto.' (Est.: '.$i->estoque.' - Custo Un.: '}} {{round($media, 2).')'}}
+
+            "> 
+            @if ($i->obs == 'DUP')
+                  (DUP)
+            @endif
+            {{$i->produto.' (Est.: '.$i->estoque.' - Custo Un.: '}} {{round($media, 2).')'}}
           </option>
         @endforeach
       </select>
     </div>
+
   </div>
+  <input type="hidden" name="duplicado" >
   <div class="col-2">
     <div class="form-group">
       <label for="quantidade">Quantidade</label>
@@ -275,6 +304,7 @@ function qtn(obj) {
             //aviso = "não";
             //alert(aviso);
         }
+  var duplicado = 
 }
 </script>
 

@@ -128,15 +128,34 @@ class CompraController extends Controller
         
         if ($produto->isNotEmpty()) {
             
+            //NOVA REGRA - AO FAZER A COMPRA O ITEM É ADICIONADO NO CATÁLOGO DE PRODUTOS COMO UM NOVO PRODUTO.
+            // FAZER COM QUE TODO DIA 05 DE CADA MÊS O VALOR DE CUSTO DOS PRODUTOS EM ESTOQUE  SEJA ZERADO.
+        
             DB::table('produtos')
-             ->where('produto', $request->item)
-                ->update(['estoque' => $produto[0]->estoque+$request->quantidade]);
+            ->where('produto', $request->item)
+            ->update(['obs' => 'DUP']);
+            
+           //SE NA COMPRA EXISTE O MESMO PRODUTO - SÓ AUMENTAR O ESTOQUE 
+            //DB::table('produtos')
+            // ->where('produto', $request->item)
+             //   ->update(['estoque' => $produto[0]->estoque+$request->quantidade]);
 
-            DB::table('compras')
-                ->where('item', $request->item)
-                ->update(['add_estoque_produto' => 'S']);
+            //DB::table('compras')
+            //    ->where('item', $request->item)
+             //   ->update(['add_estoque_produto' => 'S']);
 
         }
+
+            $produtos = new Produto;
+            $produtos->produto = $request->item;
+            $produtos->un = 'UN';
+            $produtos->valor_venda = ($request->valor_pago/$request->quantidade)*2;
+            $produtos->valor_custo = $request->valor_pago/$request->quantidade;
+            $produtos->obs = '';
+            $produtos->tipo = $request->tipo;
+            $produtos->quem_comprou = $request->quem_pagou;
+            $produtos->estoque = $request->quantidade;
+            $produtos->save();
                
         return redirect()->action('CompraController@index');
     }

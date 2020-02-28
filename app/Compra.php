@@ -15,6 +15,7 @@ class Compra extends Model
         'quem_pagou',
         'forma_pagamento',
         'quem_comprou',
+        'tipo',
 
     ];
 }
