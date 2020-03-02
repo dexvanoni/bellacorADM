@@ -38,7 +38,7 @@ class VendaController extends Controller
         $vendas = Venda::find($value);
         $itens->push($vendas);
       }
-      
+
       //echo $itens->sum('valor_pago');
       //dd($itens);
       //exit;
@@ -71,16 +71,42 @@ class VendaController extends Controller
             $vendas = DB::table('vendas')
                     ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
                     ->where('situacao', "Realizado")
+                    //->where('pago', "S")
+                    ->get();
+
+     $vendas_p = DB::table('vendas')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('situacao', "Realizado")
                     ->where('pago', "S")
                     ->get();
-                $conta = $vendas->count();
+
+    $vendas_np = DB::table('vendas')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('situacao', "Realizado")
+                    ->where('pago', "N")
+                    ->get();
+
+              $conta = $vendas->count();
         } else {
             $vendas = DB::table('vendas')
                     ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
                     ->where('situacao', "Realizado")
-                    ->where('pago', "S")
+                    //->where('pago', "S")
                     ->where('tipo', $request->tipo)
                     ->get();
+
+    $vendas_p = DB::table('vendas')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('situacao', "Realizado")
+                    ->where('pago', "S")
+                    ->get();
+
+    $vendas_np = DB::table('vendas')
+                    ->whereBetween('created_at', [$request->inicio." 00:00:00", $request->fim." 23:59:59"])
+                    ->where('situacao', "Realizado")
+                    ->where('pago', "N")
+                    ->get();
+
             $conta = $vendas->count();
         }
                
@@ -88,8 +114,12 @@ class VendaController extends Controller
         $fim = $request->fim;
         $tp = $request->tipo;
 
-        $fat_bruto = $vendas->sum('valor_pago');
-        $fat_liquido = $fat_bruto-$vendas->sum('custo');
+        
+  $fat_bruto = $vendas->sum('valor_pago');
+  $pagos = $vendas_p->sum('valor_pago');
+
+
+        $fat_liquido = $pagos-$vendas->sum('custo');
         //dd($vendas);
         //exit;
         return view('vendas.relatorio', compact('vendas', 'inicio', 'fim', 'fat_bruto', 'fat_liquido', 'tp', 'conta'));

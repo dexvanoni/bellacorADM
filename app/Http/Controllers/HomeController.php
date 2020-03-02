@@ -58,7 +58,8 @@ class HomeController extends Controller
         $lucro_liq = $saldo-$custos;
 
         $vendas_agendadas = DB::table('vendas')
-            ->whereMonth('created_at', $estemes)
+            //->whereMonth('created_at', $estemes)
+            ->whereMonth('dt_entrega', $estemes)
             ->where('situacao', '=', 'Agendado')
             ->get();
 

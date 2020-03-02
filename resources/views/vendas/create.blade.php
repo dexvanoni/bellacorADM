@@ -49,8 +49,16 @@
                 
                 $data_compra = $i->created_at;
                 
-                $limite = $dt->year.'-'.$dt->month.'-05';
-                $media = 0;
+                //$limite = $dt->year.'-'.$dt->month.'-05';
+                $dia = 05;
+                $limite = Carbon\Carbon::create($dt->year, $dt->month, 05, 00, 00, 00);
+                //$lim = $limite->toDateString();
+                //$comp = $data_compra->toDateString();
+
+                if ($limite > $data_compra){
+                  $media = 0;
+                }
+                
               }
             ?>
 
@@ -63,7 +71,6 @@
         @endforeach
       </select>
     </div>
-
   </div>
   <input type="hidden" name="duplicado" >
   <div class="col-2">
