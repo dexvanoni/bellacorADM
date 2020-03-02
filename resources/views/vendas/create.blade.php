@@ -20,7 +20,7 @@
           $insumos = DB::table('produtos')->orderBy('produto')->get();
         ?>
         @foreach($insumos as $i)
-          <option value="{{$i->produto}}" label="
+          <option value="{{$i->id}}" label="
               <?php
               if ($i->obs != 'DUP'){
 
@@ -55,8 +55,20 @@
                 //$lim = $limite->toDateString();
                 //$comp = $data_compra->toDateString();
 
-                if ($limite > $data_compra){
+                if ($limite > $data_compra && $dt > $limite){
                   $media = 0;
+                } else {
+                  $total_valor = DB::table('compras')
+                              ->where('item', $i->produto)
+                              ->sum('valor_pago');
+                $total_itens = DB::table('compras')
+                              ->where('item', $i->produto)
+                              ->sum('quantidade');
+                  if ($total_valor != 0) {
+                    $media = $total_valor/$total_itens;
+                  } else {
+                    $media = 'Este produto não foi adquirido';
+                  }
                 }
                 
               }
@@ -66,13 +78,17 @@
             @if ($i->obs == 'DUP')
                   (DUP)
             @endif
-            {{$i->produto.' (Est.: '.$i->estoque.' - Custo Un.: '}} {{round($media, 2).')'}}
+            @if ($i->obs == 'DUP' && $i->estoque <= 0)
+              
+             @else
+              {{$i->produto.' (Est.: '.$i->estoque.' - Custo Un.: '}} {{round($media, 2).')'}} 
+            @endif
           </option>
         @endforeach
       </select>
     </div>
   </div>
-  <input type="hidden" name="duplicado" >
+  <input type="hidden" name="duplicado" id="duplicado">
   <div class="col-2">
     <div class="form-group">
       <label for="quantidade">Quantidade</label>
@@ -297,7 +313,9 @@ function qtn(obj) {
   var seleciona = document.getElementById('produto');
   var selecao = seleciona[seleciona.selectedIndex].value;
   var div = document.getElementById("quant");
+  //alert(selecao);
   var aviso = "";
+  $('#duplicado').val(selecao);
   //alert(seleciona);
   //var cliente_new = document.getElementById("nome");
   if (selecao.match(/TECIDO.*/) || selecao.match(/MALHA.*/)) {
@@ -311,7 +329,7 @@ function qtn(obj) {
             //aviso = "não";
             //alert(aviso);
         }
-  var duplicado = 
+  
 }
 </script>
 

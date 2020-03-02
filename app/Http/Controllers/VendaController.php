@@ -174,6 +174,15 @@ class VendaController extends Controller
     public function store(Request $request)
     {
 
+
+      
+
+$prod = Produto::find($request->produto);
+
+$request->produto = $prod->produto;
+
+      
+
             $total_valor = DB::table('compras')->where('item', $request->produto)->sum('valor_pago');
               $total_itens = DB::table('compras')->where('item', $request->produto)->sum('quantidade');
               
@@ -182,6 +191,25 @@ class VendaController extends Controller
               } else {
                 $media = 'Este produto não foi adquirido';
               }
+
+// ALTERA CUSTO DO PRODUTO CONFORME DATA DE FECHAMENTO
+      // ----------------------
+              if($prod->obs == 'DUP'){
+              $dt = Carbon::now();
+                
+                $data_compra = $prod->created_at;
+                
+                //$limite = $dt->year.'-'.$dt->month.'-05';
+                $dia = 05;
+                $limite = Carbon::create($dt->year, $dt->month, $dia, 00, 00, 00);
+                //$lim = $limite->toDateString();
+                //$comp = $data_compra->toDateString();
+
+                if ($limite > $data_compra && $dt > $limite){
+                  $media = 0;
+                }
+              }
+// ----------------------
 
         if (!is_null($request->q)) {
             $pecas = $request->q;
