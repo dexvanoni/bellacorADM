@@ -22,7 +22,7 @@
         @foreach($insumos as $i)
           <option value="{{$i->id}}" label="
               <?php
-              if ($i->obs != 'DUP'){
+              if ($i->valor_custo > 0){
 
                 $total_valor = DB::table('compras')
                               ->where('item', $i->produto)
@@ -37,13 +37,14 @@
                   }
 
               } else {
-
+                $media = 0;
+              }
                          // Force locale
                 /*date_default_timezone_set('America/Sao_Paulo');
                 setlocale(LC_ALL, 'pt_BR.utf-8', 'ptb', 'pt_BR', 'portuguese-brazil', 'portuguese-brazilian', 'bra', 'brazil', 'br');
                 setlocale(LC_TIME, 'pt_BR.utf-8', 'ptb', 'pt_BR', 'portuguese-brazil', 'portuguese-brazilian', 'bra', 'brazil', 'br');*/
 
-
+                /*
                 // Create Carbon date
                 $dt = Carbon\Carbon::now();
                 
@@ -71,7 +72,7 @@
                   }
                 }
                 
-              }
+              }*/
             ?>
 
             "> 

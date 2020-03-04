@@ -109,12 +109,10 @@
 
       @else
         <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
-        <?php echo Carbon\Carbon::now();?>
+
       @endif
                 </div>
             </div>
-
-
 
 @endsection
 
