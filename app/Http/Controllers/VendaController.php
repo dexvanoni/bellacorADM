@@ -296,4 +296,8 @@ $request->produto = $prod->produto;
     {
         //
     }
+
+    public function relatorio_completo(){
+      return view('relatorio_completo');
+    }
 }

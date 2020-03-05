@@ -9,25 +9,26 @@
                         
                         <center><img src="/imagens/bellacor.jpeg" width="300px" height="100px"></a></center>    
                         <br>
-                        <hr>
-                        <hr>
+                        
                         <?php
 
                             $dt = Carbon\Carbon::now();
                             $dia = 05;
-                            $virada = Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
+                            $virada = Carbon\Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
 
                             $hoje = Carbon\Carbon::now()->format('Y-m-d');
-                            $dia_virada = Carbon::create($dt->year, $dt->month, $dia);
+                            $dia_virada = Carbon\Carbon::create($dt->year, $dt->month, $dia)->format('Y-m-d');
                             $dia_antes_virada = $virada->subDay(1)->format('Y-m-d');
 
-                            echo $hoje." - ".$dia_virada;
+                            //echo $hoje." - ".$dia_virada;
                             
-                            if($hoje == $dia_virada){
-                               echo 'HOJE É DIA DE FECHAMENTO DE CAIXA!';
-                            }
-
-                        ?>
+                       ?>
+                        @if($hoje == $dia_virada)
+                          <hr>
+                            <center><h5 style="color: red">HOJE É DIA DE FECHAMENTO DE CAIXA E ATUALIZAÇÃO DOS VALORES DE ESTOQUE!</h5></center>
+                            <center><a href="{{route('relatorio_completo')}}">Gerar Relatório Completo</a></center>
+                          @endif
+                        <hr>
                                                <!--<table class="table table-striped table-bordered table-condensed table-hover">
                         <tbody>
                             <tr class="success">
@@ -126,17 +127,10 @@
 
       @else
         <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
-        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
-        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
-        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
-        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
-        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
+
 
       @endif
                 </div>
             </div>
 
 @endsection
-
-             
-
