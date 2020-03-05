@@ -174,11 +174,14 @@ class VendaController extends Controller
     public function store(Request $request)
     {
 
-
-      //dd($request);
+$custo_zero = DB::table('produtos')
+                      ->where('id', $request->produto)
+                      ->get();
+      //dd($custo_zero);
       //exit;
 
 $prod = Produto::find($request->produto);
+
 $este = Produto::find($request->produto);
 
 $request->produto = $prod->produto;
@@ -212,10 +215,19 @@ $request->produto = $prod->produto;
         $vendas->situacao = $request->situacao;
         $vendas->entrega = $request->entrega;
         if (is_null($request->q)) {
+          if($custo_zero[0]->valor_custo != 0){
             $vendas->custo = ($request->custo+$media)*$vendas->quantidade;
-            } else {
-                $vendas->custo = ($request->custo*$pecas)+($media*$vendas->quantidade);
-            }
+          }else{
+            $vendas->custo = $request->custo*$vendas->quantidade;
+          }
+        } else {
+          if($custo_zero[0]->valor_custo != 0){
+            $vendas->custo = ($request->custo*$pecas)+($media*$vendas->quantidade);
+          }else{
+            $vendas->custo = $request->custo*$vendas->quantidade;
+          }
+          
+        }
         $vendas->obs = $request->obs;
         $vendas->save();
         

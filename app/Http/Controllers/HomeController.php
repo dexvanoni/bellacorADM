@@ -35,14 +35,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-
+            //ZERA ESTOQUE DIA 05 DE CADA MÊS
 
             $duplicados = DB::table('produtos')->get();
 
             $dt = Carbon::now();
             $dia = 05;
-            $virada = Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);      
+            $virada = Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
 
+            
+            $hoje = Carbon::now()->format('Y-m-d');
+            $dia_virada = Carbon::create($dt->year, $dt->month, $dia);
+            $dia_antes_virada = $virada->subDay(1)->format('Y-m-d');
             //echo $dt." - ".$dia." - ".$virada;
 
            if ($duplicados->isNotEmpty()) {
@@ -51,7 +55,7 @@ class HomeController extends Controller
                     DB::table('produtos')
                        ->where('id', $d->id)
                        ->update(['valor_custo' => 0]);
-                    echo "alterar valor para zero";
+                    //echo "alterar valor para zero";
                     }elseif($d->created_at <= $virada && $dt >= $virada && $d->estoque <= 0){
                     DB::table('produtos')
                        ->where('id', $d->id)
@@ -60,7 +64,49 @@ class HomeController extends Controller
                     }
                 }
             }
+            //--------------------------------------------------------
            
+    // INSERE NA TABELA DE CUSTOS A ENERGIA E A NET TODO DIA 04 DO MÊS
+           // echo $hoje.' - '.$dia_virada.' - '.$dia_antes_virada;
+
+           if ($hoje >= $dia_antes_virada) {
+                $energia = DB::table('compras')
+                           ->where('item', 'CONSUMO DE ENERGIA')
+                           ->whereMonth('created_at', $dt->month)
+                           ->get();
+
+                $internet = DB::table('compras')
+                           ->where('item', 'INTERNET')
+                           ->whereMonth('created_at', $dt->month)
+                           ->get();
+
+                if ($energia->isEmpty()) {
+                    $custos = new Compra;
+                    $custos->item = 'CONSUMO DE ENERGIA';
+                    $custos->quantidade = 1;
+                    $custos->valor_pago = 150.55;
+                    $custos->num_parcelas = 1;
+                    $custos->fornecedor = 'ENERGISA';
+                    $custos->quem_pagou = 'DENIS';
+                    $custos->forma_pagamento = 'DINHEIRO';
+                    $custos->tipo = 'SUBLIMAÇÃO';
+                    $custos->save();
+                }
+
+                if ($internet->isEmpty()) {
+                    $custos_net = new Compra;
+                    $custos_net->item = 'INTERNET';
+                    $custos_net->quantidade = 1;
+                    $custos_net->valor_pago = 41.19;
+                    $custos_net->num_parcelas = 1;
+                    $custos_net->fornecedor = 'NET';
+                    $custos_net->quem_pagou = 'DENIS';
+                    $custos_net->forma_pagamento = 'DINHEIRO';
+                    $custos_net->tipo = 'SUBLIMAÇÃO';
+                    $custos_net->save();
+                }
+                
+            }          
 
         $estemes = Carbon::now()->month;
 

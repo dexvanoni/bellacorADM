@@ -155,7 +155,27 @@ $a2 = DB::table('vendas')
                   <input type="checkbox" value="{{$i->id}}" id="check_recibo" name="check_recibo">
                 @endif
               </td>
-              <td style="width: 30%; text-align: center;" >{{$i->produto}}</td>
+              <td style="width: 30%; text-align: center;" >
+                <?php 
+                  $media_pago = DB::table('compras')
+                                  ->where('item', $i->produto)
+                                  ->sum('valor_pago');
+                  $media_quant = DB::table('compras')
+                                  ->where('item', $i->produto)
+                                  ->sum('quantidade');
+                  if(!is_null($media_pago)){
+                    $media_custo = $media_pago/$media_quant;
+                  }else{
+                    $media_custo = 0;
+                  }
+                ?>
+                @if($media_custo != 0)
+                  @if($i->custo < $media_custo)
+                    <i title="Este produto foi vendido com estoque já pago em compra anterior." class="fas fa-exclamation-circle" style="color: red"></i>
+                  @endif
+                @endif
+                {{$i->produto}}
+              </td>
               <td style="width: 5%; text-align: center;" >
                 {{$i->quantidade}}
                 <?php $prod = DB::table('produtos')->where('produto', $i->produto)->sum('estoque')?>
@@ -202,6 +222,7 @@ $a2 = DB::table('vendas')
               </td>
               <td style="width: 5%; text-align: center;" >
                 @if($i->pago == 'N')
+                  
                   <i title="Compra não paga!" class="fas fa-exclamation-triangle" style="color: red"></i>
                   <a title="PAGOU" href="{{ route('vendas.pagou', ['i' => $i->id]) }}" class="badge badge-success" onclick="return confirm('\nEsta venda foi realmente PAGA?'); return false;"><i class="fas fa-hand-holding-usd"></i></a>
                   @else

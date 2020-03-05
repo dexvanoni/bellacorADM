@@ -146,6 +146,7 @@ class CompraController extends Controller
 
         }
 
+        if ($request->cad == 'S') {
             $produtos = new Produto;
             $produtos->produto = $request->item;
             $produtos->un = 'UN';
@@ -156,9 +157,8 @@ class CompraController extends Controller
             $produtos->quem_comprou = $request->quem_pagou;
             $produtos->estoque = $request->quantidade;
             $produtos->save();
-
-
-
+        }    
+        
             $duplicados = DB::table('produtos')->get();
 
             $dt = Carbon::now();

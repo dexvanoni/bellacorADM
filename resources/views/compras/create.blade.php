@@ -85,7 +85,16 @@
     </div>
   </div>
 </div>
-
+<div class="row">
+  <div class="col">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="cad" id="cad" value="S">
+      <label class="form-check-label" for="cad">
+        Cadastrar na lista de PRODUTOS automaticamente
+      </label>
+    </div>
+  </div>
+</div>
 <hr>
 <div class="row justify-content-md-center">
   <div class="col-md-auto">

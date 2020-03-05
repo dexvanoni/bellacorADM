@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('titulo')
-    Tela Inicial - ADM STAMP
+    Tela Inicial - BellaCor
 @endsection
 @section('content')
                   <div class="row justify-content-md-center">
@@ -10,8 +10,25 @@
                         <center><img src="/imagens/bellacor.jpeg" width="300px" height="100px"></a></center>    
                         <br>
                         <hr>
-                        
-                        <!--<table class="table table-striped table-bordered table-condensed table-hover">
+                        <hr>
+                        <?php
+
+                            $dt = Carbon\Carbon::now();
+                            $dia = 05;
+                            $virada = Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
+
+                            $hoje = Carbon\Carbon::now()->format('Y-m-d');
+                            $dia_virada = Carbon::create($dt->year, $dt->month, $dia);
+                            $dia_antes_virada = $virada->subDay(1)->format('Y-m-d');
+
+                            echo $hoje." - ".$dia_virada;
+                            
+                            if($hoje == $dia_virada){
+                               echo 'HOJE É DIA DE FECHAMENTO DE CAIXA!';
+                            }
+
+                        ?>
+                                               <!--<table class="table table-striped table-bordered table-condensed table-hover">
                         <tbody>
                             <tr class="success">
                                 <td>Total de Vendas deste mês</td>
@@ -96,7 +113,7 @@
                 @endif
               </td>
               <td style="width: 5%; text-align: center;" >
-                @if($i->pago == 'N')
+                @if($i->pago = 'N')
                   <i title="Compra não paga!" class="fas fa-exclamation-triangle" style="color: red"></i>
                   @else
                   <i class="fas fa-check-double" style="color: green"></i>
@@ -108,6 +125,11 @@
       </table>
 
       @else
+        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
+        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
+        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
+        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
+        <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
         <center><h3>NÃO EXISTEM PEDIDOS AGENDADOS PARA ENTREGA</h3></center>
 
       @endif
