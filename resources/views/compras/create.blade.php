@@ -69,6 +69,7 @@
         <option>Selecione...</option>
         <option value="DENIS">DENIS</option>
         <option value="FABIANA">FABIANA</option>
+        <option value="FABIANA">RENATO</option>
         <option value="EMPRESA">EMPRESA</option>
       </select>
     </div>

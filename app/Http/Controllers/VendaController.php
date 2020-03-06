@@ -298,6 +298,59 @@ $request->produto = $prod->produto;
     }
 
     public function relatorio_completo(){
-      return view('relatorio_completo');
+
+      // Create Carbon date
+        $dt = Carbon::now();
+        $mes = $dt->formatLocalized('%B de %Y');
+        
+        //$mes = Carbon\Carbon::now();
+        $dia = 05;
+        $virada = Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
+        $hoje = Carbon::now()->format('Y-m-d');
+        $dia_virada = Carbon::create($dt->year, $dt->month, $dia);
+        $dia_antes_virada = $virada->subDay(1)->format('Y-m-d');
+        $dia_mes_anterior = $dia_virada->subMonth();
+
+
+      $vendas = DB::table('vendas')
+                ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                ->where('pago', 'S')
+                ->get();
+      $vendas_naop = DB::table('vendas')
+                ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                ->get();
+
+      $compras_denis = DB::table('compras')
+                ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                ->where('quem_pagou', 'DENIS')
+                ->get();
+
+      $compras_fabiana = DB::table('compras')
+                ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                ->where('quem_pagou', 'FABIANA')
+                ->get();
+
+      $compras_renato = DB::table('compras')
+                ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                ->where('quem_pagou', 'RENATO')
+                ->get();
+
+      $compras_empresa = DB::table('compras')
+                ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                ->where('quem_pagou', 'EMPRESA')
+                ->get();
+
+      $custo_bruto = $vendas_naop->sum('custo');
+      $custo_liquido = $vendas->sum('custo');      
+      $faturamento_bruto = $vendas->sum('valor_pago');
+      $faturamento_liquido = $faturamento_bruto-($vendas_naop->sum('custo'));
+      $porcentagem = ($faturamento_liquido/$faturamento_bruto)*100;
+      $total_compras = $vendas_naop->count();
+      $gastos_denis = $compras_denis->sum('valor_pago');
+      $gastos_fabiana = $compras_fabiana->sum('valor_pago');
+      $gastos_renato = $compras_renato->sum('valor_pago');
+      $gastos_empresa = $compras_empresa->sum('valor_pago');
+
+      return view('relatorio_completo', compact('virada','dia_mes_anterior','faturamento_bruto','faturamento_liquido','porcentagem','custo_liquido','custo_bruto','total_compras','gastos_denis','gastos_fabiana','gastos_renato','gastos_empresa'));
     }
 }

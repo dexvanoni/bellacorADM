@@ -25,6 +25,7 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 <div class="row">
     <div class="col">
         <center><h4>RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($dt->formatLocalized('%B de %Y'))}}</h4></center>
+        <center><h6>De {{date('d/m/Y', strtotime($dia_mes_anterior))}} a {{date('d/m/Y', strtotime($virada))}}</h6></center>
     </div>
 </div>
 <hr>
@@ -36,15 +37,15 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 		<table border="1">
 		    <tr>
 		        <td>BRUTO EM VENDAS</td>
-		        <td></td>
+		        <td>R$ {{$faturamento_bruto}}</td>
 		    </tr>
 		    <tr>
 		        <td>LÍQUIDO EM VENDAS</td>
-		        <td></td>
+		        <td>R$ {{$faturamento_liquido}}</td>
 		    </tr>
 		    <tr>
 		        <td>PORC. DE LUCRO</td>
-		        <td></td>
+		        <td>{{round($porcentagem, 2)}}%</td>
 		    </tr>
 		</table>
 	</div>
