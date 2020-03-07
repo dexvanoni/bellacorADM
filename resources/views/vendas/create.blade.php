@@ -75,12 +75,10 @@
             ?>
 
             "> 
-            @if ($i->obs == 'DUP')
+            @if ($i->obs == 'DUP' && $i->estoque >= 0)
                   (DUP)
             @endif
-            @if ($i->obs == 'DUP' && $i->estoque <= 0)
-              
-             @else
+            @if (($i->obs == 'DUP' && $i->estoque >= 0) || ($i->obs != 'DUP' && $i->estoque >= 0))
               {{$i->produto.' (Est.: '.$i->estoque.' - Custo Un.: '}} {{round($media, 2).')'}} 
             @endif
           </option>

@@ -35,6 +35,35 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        // FAZ A VERIFICAÇÃO DO ESTOQUE E ALTERA OS VALORES CONFORME A DATA
+
+            $duplicados = DB::table('produtos')
+                            ->where('obs', 'DUP')
+                            ->get();
+
+            $dt = Carbon::now();
+            $dia = 05;
+            $virada = Carbon::create($dt->year, $dt->month, $dia, 00, 00, 00);        
+
+           if ($duplicados->isNotEmpty()) {
+                foreach ($duplicados as $d) {
+                    if ($d->created_at <= $virada && $dt >= $virada && $d->estoque > 0) {
+                    DB::table('produtos')
+                        ->where('id', $d->id)
+                        ->update(['valor_custo' => 0]);
+                    }elseif($d->created_at <= $virada && $dt >= $virada && $d->estoque <= 0){
+                    DB::table('produtos')
+                        ->where('id', $d->id)
+                        ->delete(); 
+                    }
+                }
+            }
+
+            $comprados_antes = DB::table('produtos')
+                                ->where('created_at', ,'<=', $virada)
+                                ->get();
+        // -----------------------------------------------------------------
         $estemes = Carbon::now()->month;
 
         $vendas = DB::table('vendas')

@@ -19,6 +19,7 @@ LISTA DE PRODUTOS
             <th style="text-align: center;">Valor Venda</th>
             <th style="text-align: center;">Custo</th>
             <th style="text-align: center;">Estoque</th>
+            <th style="text-align: center;">Data Aquisição</th>
             <!--<th style="text-align: center;">Adc. Estoque</th>-->
             <th style="text-align: center;">Ações</th>
           </tr></center>
@@ -33,20 +34,25 @@ LISTA DE PRODUTOS
                 {{ $i->produto }}
               </td>
               <td style="width: 15%; text-align: center;" >R$ {{$i->valor_venda}}</td>
-              <td style="width: 15%; text-align: center;" >R$ 
-                <?php
-                  $total_valor = DB::table('compras')->where('item', $i->produto)->sum('valor_pago');
-                  $total_itens = DB::table('compras')->where('item', $i->produto)->sum('quantidade');
-                  
-                  if ($total_valor != 0) {
-                    $media = $total_valor/$total_itens;
-                  } else {
-                    $media = 'Este produto não foi adquirido';
-                  }
-                ?>
-                {{round($media, 2)}}
+              <td style="width: 15%; text-align: center;" > 
+                @if ($i->valor_custo == 0)
+                  R$ 0
+                 @else
+                    <?php $total_valor = DB::table('compras')->where('item', $i->produto)->sum('valor_pago');
+                    $total_itens = DB::table('compras')->where('item', $i->produto)->sum('quantidade');
+                    
+                    if ($total_valor != 0) {
+                        $media = $total_valor/$total_itens;
+                      } else {
+                        $media = 'Este produto não foi adquirido';
+                      }
+                    ?>
+
+                  R$ {{round($media, 2)}}
+                @endif
               </td>
               <td style="width: 10%; text-align: center; color: green; background-color:  <?php if ($i->estoque == 0) echo "red"; ?>" >{{$i->estoque}}</td>
+              <td style="width: 10%; text-align: center;">{{date('d/m/Y', strtotime($i->created_at))}}</td>
               <!--<td style="width: 10%; text-align: center;">
               		<a href="{{ route('produtos.add', ['i' => $i->id]) }}" class="badge badge-primary">+1</a>
               		<a href="{{ route('produtos.add_dez', ['i' => $i->id]) }}" class="badge badge-success">+10</a>
