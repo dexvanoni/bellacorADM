@@ -427,19 +427,29 @@ $request->produto = $prod->produto;
 
         $divisao = $faturamento_liquido/3;
 
-        if ($retroativo_denis->isNotEmpty()) {
+        $estemes = $dt->month;
+        
+        $saldo_denis = Carbon::parse($retroativo_denis[0]->created_at);
+        $mes_saldo_denis = $saldo_denis->month;
+        $saldo_fabiana = Carbon::parse($retroativo_fabiana[0]->created_at);
+        $mes_saldo_fabiana = $saldo_fabiana->month;
+        $saldo_renato = Carbon::parse($retroativo_renato[0]->created_at);
+        $mes_saldo_renato = $saldo_renato->month;
+
+
+        if ($retroativo_denis->isNotEmpty() && $mes_saldo_denis < $estemes) {
           $p_denis = $divisao+$gastos_denis+$retroativo_denis[0]->valor;
         }else{
           $p_denis = $divisao+$gastos_denis;
         }
 
-        if ($retroativo_fabiana->isNotEmpty()) {
+        if ($retroativo_fabiana->isNotEmpty() && $mes_saldo_fabiana < $estemes) {
           $p_fabiana = $divisao+$gastos_fabiana+$retroativo_fabiana[0]->valor;
         }else{
           $p_fabiana = $divisao+$gastos_fabiana;
         }
 
-        if ($retroativo_renato->isNotEmpty()) {
+        if ($retroativo_renato->isNotEmpty() && $mes_saldo_renato < $estemes) {
           $p_renato = $divisao+$gastos_renato+$retroativo_renato[0]->valor;
         }else{
           $p_renato = $divisao+$gastos_renato;
@@ -457,6 +467,30 @@ $request->produto = $prod->produto;
           }
       } else {
         $pagar_denis = 0;
+      }
+
+      if ($p_fabiana <= $gastos_fabiana ) {
+        $pagar_fabiana = $gastos_fabiana-$p_fabiana;
+          if ($retroativo_fabiana->isEmpty()) {
+            $retroativo_f = new Retroativo;
+            $retroativo_f->quem = 'FABIANA';
+            $retroativo_f->valor = $pagar_fabiana;
+            $retroativo_f->save();
+          }
+      } else {
+        $pagar_fabiana = 0;
+      }
+
+      if ($p_renato <= $gastos_renato ) {
+        $pagar_renato = $gastos_renato-$p_renato;
+          if ($retroativo_renato->isEmpty()) {
+            $retroativo_r = new Retroativo;
+            $retroativo_r->quem = 'RENATO';
+            $retroativo_r->valor = $pagar_renato;
+            $retroativo_r->save();
+          }
+      } else {
+        $pagar_renato = 0;
       }
       
          //echo $pagar_denis;

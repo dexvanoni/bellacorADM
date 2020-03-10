@@ -44,11 +44,11 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 		<table border="1" >
 		    <tr>
 		        <td>BRUTO EM VENDAS</td>
-		        <td>R$ {{$faturamento_bruto}}</td>
+		        <td>R$ {{round($faturamento_bruto, 2)}}</td>
 		    </tr>
 		    <tr>
 		        <td>LÍQUIDO EM VENDAS</td>
-		        <td>R$ {{$faturamento_liquido}}</td>
+		        <td>R$ {{round($faturamento_liquido, 2)}}</td>
 		    </tr>
 		    <tr>
 		        <td>PORC. DE LUCRO</td>
@@ -61,15 +61,15 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 		<table border="1">
 		    <tr>
 		        <td>CUSTO LÍQUIDO EM VENDAS</td>
-		        <td>R$ {{$custo_liquido}}</td>
+		        <td>R$ {{round($custo_liquido, 2)}}</td>
 		    </tr>
 		    <tr>
 		        <td>CUSTO BRUTO GERAL</td>
-		        <td>R$ {{$custo_bruto}}</td>
+		        <td>R$ {{round($custo_bruto, 2)}}</td>
 		    </tr>
 		    <tr>
 		        <td>TOTAL EM COMPRAS</td>
-		        <td>R$ {{$total_compras}}</td>
+		        <td>R$ {{round($total_compras, 2)}}</td>
 		    </tr>
 		</table>
 	</div>
@@ -78,19 +78,19 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 		<table border="1">
 			<tr>
 		        <td>DENIS</td>
-		        <td>R$ {{$gastos_denis}}</td>
+		        <td>R$ {{round($gastos_denis, 2)}}</td>
 		    </tr>
 		    <tr>
 		        <td>FABIANA</td>
-		        <td>R$ {{$gastos_fabiana}}</td>
+		        <td>R$ {{round($gastos_fabiana, 2)}}</td>
 		    </tr>
 		    <tr>
 		        <td>RENATO</td>
-		        <td>R$ {{$gastos_renato}}</td>
+		        <td>R$ {{round($gastos_renato, 2)}}</td>
 		    </tr>
 		    <tr>
 		        <td>EMPRESA</td>
-		        <td>R$ {{$gastos_empresa}}</td>
+		        <td>R$ {{round($gastos_empresa, 2)}}</td>
 		    </tr>
 		</table>	
 	</div>
