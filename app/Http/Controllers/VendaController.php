@@ -9,6 +9,7 @@ use App\Cliente;
 use App\Compra;
 use App\Produto;
 use Carbon\Carbon;
+use App\Retroativo;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Schema;
@@ -304,53 +305,163 @@ $request->produto = $prod->produto;
         $mes = $dt->formatLocalized('%B de %Y');
         
         //$mes = Carbon\Carbon::now();
-        $dia = 05;
+        $dia = '11';
         $virada = Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
         $hoje = Carbon::now()->format('Y-m-d');
         $dia_virada = Carbon::create($dt->year, $dt->month, $dia);
         $dia_antes_virada = $virada->subDay(1)->format('Y-m-d');
         $dia_mes_anterior = $dia_virada->subMonth();
 
+        $sobra = $dt->month.'/'.$dt->year;
+
 
       $vendas = DB::table('vendas')
                 ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
                 ->where('pago', 'S')
+                ->where('tipo', 'SUBLIMAÇÃO')
                 ->get();
       $vendas_naop = DB::table('vendas')
                 ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                ->where('tipo', 'SUBLIMAÇÃO')
                 ->get();
 
       $compras_denis = DB::table('compras')
                 ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
                 ->where('quem_pagou', 'DENIS')
+                ->where('tipo', 'SUBLIMAÇÃO')
                 ->get();
 
       $compras_fabiana = DB::table('compras')
                 ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
                 ->where('quem_pagou', 'FABIANA')
+                ->where('tipo', 'SUBLIMAÇÃO')
                 ->get();
 
       $compras_renato = DB::table('compras')
                 ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
                 ->where('quem_pagou', 'RENATO')
+                ->where('tipo', 'SUBLIMAÇÃO')
                 ->get();
 
       $compras_empresa = DB::table('compras')
                 ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
                 ->where('quem_pagou', 'EMPRESA')
+                ->where('tipo', 'SUBLIMAÇÃO')
                 ->get();
+      
+      $todas_compras = DB::table('compras')
+                ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                //->where('quem_pagou', 'EMPRESA')
+                //->sum('valor_pago')
+                ->where('tipo', 'SUBLIMAÇÃO')
+                ->get();           
 
-      $custo_bruto = $vendas_naop->sum('custo');
-      $custo_liquido = $vendas->sum('custo');      
-      $faturamento_bruto = $vendas->sum('valor_pago');
-      $faturamento_liquido = $faturamento_bruto-($vendas_naop->sum('custo'));
-      $porcentagem = ($faturamento_liquido/$faturamento_bruto)*100;
-      $total_compras = $vendas_naop->count();
-      $gastos_denis = $compras_denis->sum('valor_pago');
-      $gastos_fabiana = $compras_fabiana->sum('valor_pago');
-      $gastos_renato = $compras_renato->sum('valor_pago');
-      $gastos_empresa = $compras_empresa->sum('valor_pago');
+      $todas_compras_pessoas = DB::table('compras')
+                ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                 ->where(function ($query) {
+                      $query->where('tipo', '=', 'SUBLIMAÇÃO')
+                      ->whereIn('quem_pagou', ['DENIS', 'RENATO', 'FABIANA']);
+                    })->get();
 
-      return view('relatorio_completo', compact('virada','dia_mes_anterior','faturamento_bruto','faturamento_liquido','porcentagem','custo_liquido','custo_bruto','total_compras','gastos_denis','gastos_fabiana','gastos_renato','gastos_empresa'));
+      if (!is_null($vendas_naop)) {
+        $custo_bruto = $vendas_naop->sum('custo');
+      } else {
+        $custo_bruto = 0;
+      }
+
+      if(!is_null($vendas)){
+        $custo_liquido = $vendas->sum('custo');
+        $faturamento_bruto = $vendas->sum('valor_pago');
+      } else {
+        $custo_liquido = 0;
+        $faturamento_bruto = 0;
+      }
+
+      if ($faturamento_bruto > 0) {
+        $faturamento_liquido = $faturamento_bruto-$todas_compras_pessoas->sum('valor_pago');
+      } else {
+        $faturamento_liquido = 0;
+      }
+
+      if ($faturamento_bruto > 0 && $faturamento_liquido > 0) {
+       $porcentagem = ($faturamento_liquido/$faturamento_bruto)*100;
+      } else {
+        $porcentagem = 0;
+      }
+
+      if (!is_null($todas_compras)) {
+        $total_compras = $todas_compras->sum('valor_pago');
+      } else {
+        $total_compras = 0;
+      }
+
+      if (!is_null($todas_compras)) {
+        $gastos_denis = $compras_denis->sum('valor_pago');
+        $gastos_fabiana = $compras_fabiana->sum('valor_pago');
+        $gastos_renato = $compras_renato->sum('valor_pago');
+        $gastos_empresa = $compras_empresa->sum('valor_pago');
+      } else {
+        $gastos_denis = 0;
+        $gastos_fabiana = 0;
+        $gastos_renato = 0;
+        $gastos_empresa = 0;
+      }
+
+      $retroativo_denis = DB::table('retroativo')
+                          ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                          ->where('quem', 'DENIS')
+                          ->get();
+      $retroativo_fabiana = DB::table('retroativo')
+                          ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                          ->where('quem', 'FABIANA')
+                          ->get();
+      $retroativo_renato = DB::table('retroativo')
+                          ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
+                          ->where('quem', 'RENATO')
+                          ->get();
+
+                          //echo $retroativo_denis;
+                          //exit;                          
+
+      if ($faturamento_bruto > 0) {
+
+        $divisao = $faturamento_liquido/3;
+
+        if ($retroativo_denis->isNotEmpty()) {
+          $p_denis = $divisao+$gastos_denis+$retroativo_denis[0]->valor;
+        }else{
+          $p_denis = $divisao+$gastos_denis;
+        }
+
+        if ($retroativo_fabiana->isNotEmpty()) {
+          $p_fabiana = $divisao+$gastos_fabiana+$retroativo_fabiana[0]->valor;
+        }else{
+          $p_fabiana = $divisao+$gastos_fabiana;
+        }
+
+        if ($retroativo_renato->isNotEmpty()) {
+          $p_renato = $divisao+$gastos_renato+$retroativo_renato[0]->valor;
+        }else{
+          $p_renato = $divisao+$gastos_renato;
+        }
+      
+      }
+
+      if ($p_denis <= $gastos_denis ) {
+        $pagar_denis = $gastos_denis-$p_denis;
+          if ($retroativo_denis->isEmpty()) {
+            $retroativo = new Retroativo;
+            $retroativo->quem = 'DENIS';
+            $retroativo->valor = $pagar_denis;
+            $retroativo->save();
+          }
+      } else {
+        $pagar_denis = 0;
+      }
+      
+         //echo $pagar_denis;
+      //exit;
+            
+     return view('relatorio_completo', compact('virada','dia_mes_anterior','faturamento_bruto','faturamento_liquido','porcentagem','custo_liquido','custo_bruto','total_compras','gastos_denis','gastos_fabiana','gastos_renato','gastos_empresa', 'p_denis', 'p_fabiana', 'p_renato', 'p_empresa'));
     }
 }

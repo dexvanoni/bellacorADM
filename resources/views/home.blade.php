@@ -26,9 +26,9 @@
                         @if($hoje == $dia_virada)
                           <hr>
                             <center><h5 style="color: red">HOJE É DIA DE FECHAMENTO DE CAIXA E ATUALIZAÇÃO DOS VALORES DE ESTOQUE!</h5></center>
-                            <center><a href="{{route('relatorio_completo')}}">Gerar Relatório Completo</a></center>
                           @endif
                         <hr>
+                        <center><a href="{{route('relatorio_completo')}}">Gerar Relatório Completo</a></center><br>
                                                <!--<table class="table table-striped table-bordered table-condensed table-hover">
                         <tbody>
                             <tr class="success">

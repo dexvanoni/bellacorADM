@@ -197,7 +197,7 @@ $a2 = DB::table('vendas')
               <td style="width: 5%; text-align: center;" >
                 R$ {{$i->valor_pago}}
                 @if($i->valor_entrada != 0 && $i->pago == 'N')
-                  <i title="Este cliente pagou entrada de R$ {{$i->valor_entrada}}" class="fas fa-exclamation-circle" style="color: green"></i>
+                  <i title="Este cliente pagou entrada de R$ {{$i->valor_entrada}}&#013COBRAR R$ {{$i->valor_pago-$i->valor_entrada}}" class="fas fa-exclamation-circle" style="color: green"></i>
                 @endif
                 @if($i->pago == 'S')
                   <i title="Custo TOTAL: R$ {{$i->custo}}&#013Lucro Líquido: R$ {{$i->valor_pago-$i->custo}}" class="fas fa-vote-yea" style="color: black"></i>

@@ -76,13 +76,15 @@
       </p>
       <br>
       <br>
-      <br>
       <center>_________________________________________________</center>
       <center>Fabiana Bezerra de Souza Vanoni</center>
       <center><strong>BellaCor - Bordado e Estamparia</strong></center>
       <center>CNPJ: 35.315.087/0001-70</center>
       <br>
-      <br>
+
+      <center><p style="margin-left: 80px; margin-right: 80px">HASH DE DESCONTO: 123423423423456667890</p></center>
+      <h6 style="margin-left: 80px; margin-right: 80px; color: red">Apresente este recibo e receba 10% de desconto na sua próxima compra! (NÃO ACUMULATIVA)</h6>
+
       <p style="margin-left: 80px; margin-right: 80px">
         <strong>Contatos </strong><br>
         <strong>Tel/Whatsapp:</strong> (67)99201-4825<br>

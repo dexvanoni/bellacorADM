@@ -16,7 +16,7 @@
       <center><h3 style="margin-top: 50px">RECIBO</h3></center>
       <br>
       <br>
-      <br>
+
       <p align="justify" style="margin-left: 80px; margin-right: 80px ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eu, Fabiana Bezerra de Souza Vanoni, CPF 004.690.481-66, representande da BellaCor Bordado e Estamparia, declaro que recebi o valor de <strong>R$ {{$vendas->valor_pago}} </strong>reais do(a) Sr.(a) <strong>{{$vendas->cliente}}</strong> no dia <strong>{{date('d/m/Y', strtotime($vendas->dt_entrega))}}</strong> pela confecção dos seguintes itens abaixo descritos:
       </p>
       <table style="margin-left: 80px; margin-right: 80px">
@@ -48,8 +48,6 @@
       </p>
       <br>
       <br>
-      <br>
-      <br>
       <p align="justify" style="margin-left: 80px; margin-right: 80px ">
         <?php 
                 // Force locale
@@ -67,18 +65,20 @@
       </p>
       <br>
       <br>
-      <br>
       <center>_________________________________________________</center>
       <center>Fabiana Bezerra de Souza Vanoni</center>
       <center><strong>BellaCor - Bordado e Estamparia</strong></center>
       <center>CNPJ: 35.315.087/0001-70</center>
       <br>
       <br>
+      <center><p style="margin-left: 80px; margin-right: 80px">HASH DE DESCONTO: 123423423423456667890</p></center>
+      <h6 style="margin-left: 80px; margin-right: 80px; color: red">Apresente este recibo e receba 10% de desconto na sua próxima compra! (NÃO ACUMULATIVA)</h6>
+      
       <p style="margin-left: 80px; margin-right: 80px">
         <strong>Contatos </strong><br>
         <strong>Tel/Whatsapp:</strong> (67)99201-4825<br>
         <strong>Email:</strong> nova.bellacor@gmail.com<br>
-        <strong>Loja virtual:</strong> www.dfbordados.com.br
+        <strong>INSTAGRAM:</strong> @bellacorpersonalizados
       </p>
       <br><br>
       <center><p>A Equipe BellaCor agradece a preferência!</p></center>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTipoCompras extends Migration
+class AddRetroativoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddTipoCompras extends Migration
      */
     public function up()
     {
-        Schema::table('compras', function (Blueprint $table) {
-            $table->string('tipo');
+        Schema::create('retroativo', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('quem');
+            $table->float('valor');
+            $table->timestamps();
         });
     }
 

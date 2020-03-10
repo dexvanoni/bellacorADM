@@ -1,4 +1,11 @@
 @extends('template')
+
+@section('estilo')
+td{
+	font-size: 12px;
+}
+@endsection
+
 @section('titulo')
 <?php 
                 // Force locale
@@ -12,11 +19,11 @@
         $mes = $dt->formatLocalized('%B de %Y');
         
         //$mes = Carbon\Carbon::now();
-        $dia = 05;
-        $virada = Carbon\Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
-        $hoje = Carbon\Carbon::now()->format('Y-m-d');
-        $dia_virada = Carbon\Carbon::create($dt->year, $dt->month, $dia)->format('Y-m-d');
-        $dia_antes_virada = $virada->subDay(1)->format('Y-m-d');
+       // $dia = 10;
+       // $virada = Carbon\Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
+       // $hoje = Carbon\Carbon::now()->format('Y-m-d');
+        //$dia_virada = Carbon\Carbon::create($dt->year, $dt->month, $dia)->format('Y-m-d');
+        //$dia_antes_virada = $virada->subDay(1)->format('Y-m-d');
 
       ?>
 RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
@@ -34,7 +41,7 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 <div class="row">
 	<div class="col-3">
 		<h6>Faturamento</h6>
-		<table border="1">
+		<table border="1" >
 		    <tr>
 		        <td>BRUTO EM VENDAS</td>
 		        <td>R$ {{$faturamento_bruto}}</td>
@@ -54,15 +61,15 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 		<table border="1">
 		    <tr>
 		        <td>CUSTO LÍQUIDO EM VENDAS</td>
-		        <td></td>
+		        <td>R$ {{$custo_liquido}}</td>
 		    </tr>
 		    <tr>
 		        <td>CUSTO BRUTO GERAL</td>
-		        <td></td>
+		        <td>R$ {{$custo_bruto}}</td>
 		    </tr>
 		    <tr>
 		        <td>TOTAL EM COMPRAS</td>
-		        <td></td>
+		        <td>R$ {{$total_compras}}</td>
 		    </tr>
 		</table>
 	</div>
@@ -70,16 +77,20 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 		<h6>Gastos por pessoa e empresa</h6>
 		<table border="1">
 			<tr>
-		        <td>DENIS/FABIANA</td>
-		        <td></td>
+		        <td>DENIS</td>
+		        <td>R$ {{$gastos_denis}}</td>
+		    </tr>
+		    <tr>
+		        <td>FABIANA</td>
+		        <td>R$ {{$gastos_fabiana}}</td>
 		    </tr>
 		    <tr>
 		        <td>RENATO</td>
-		        <td></td>
+		        <td>R$ {{$gastos_renato}}</td>
 		    </tr>
 		    <tr>
 		        <td>EMPRESA</td>
-		        <td></td>
+		        <td>R$ {{$gastos_empresa}}</td>
 		    </tr>
 		</table>	
 	</div>
@@ -87,16 +98,16 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 		<h6>RECEBIMENTOS</h6>
 		<table border="1">
 			<tr>
-		        <td>DENIS/FABIANA</td>
-		        <td></td>
+		        <td>DENIS</td>
+		        <td>R$ {{$p_denis}}</td>
+		    </tr>
+		    <tr>
+		        <td>FABIANA</td>
+		        <td>R$ {{$p_fabiana}}</td>
 		    </tr>
 		    <tr>
 		        <td>RENATO</td>
-		        <td></td>
-		    </tr>
-		    <tr>
-		        <td>EMPRESA</td>
-		        <td></td>
+		        <td>R$ {{$p_renato}}</td>
 		    </tr>
 		</table>	
 	</div>

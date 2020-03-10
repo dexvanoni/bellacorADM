@@ -66,6 +66,7 @@
    -o-animation: pisca3 .75s linear infinite;
    animation: pisca3 .75s linear infinite;
 }
+@yield('estilo')
 </style>
 
 </head>
