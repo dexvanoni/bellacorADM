@@ -428,34 +428,47 @@ $request->produto = $prod->produto;
         $divisao = $faturamento_liquido/3;
 
         $estemes = $dt->month;
+
+        $mespassado = $estemes-1;
         
-        $saldo_denis = Carbon::parse($retroativo_denis[0]->created_at);
-        $mes_saldo_denis = $saldo_denis->month;
-        $saldo_fabiana = Carbon::parse($retroativo_fabiana[0]->created_at);
-        $mes_saldo_fabiana = $saldo_fabiana->month;
-        $saldo_renato = Carbon::parse($retroativo_renato[0]->created_at);
-        $mes_saldo_renato = $saldo_renato->month;
-
-
-        if ($retroativo_denis->isNotEmpty() && $mes_saldo_denis < $estemes) {
-          $p_denis = $divisao+$gastos_denis+$retroativo_denis[0]->valor;
-        }else{
-          $p_denis = $divisao+$gastos_denis;
+        if ($retroativo_denis->isNotEmpty()) {
+            $saldo_denis = Carbon::parse($retroativo_denis[0]->created_at);
+            $mes_saldo_denis = $saldo_denis->month;
+              if ($retroativo_denis->isNotEmpty() && $mes_saldo_denis = $mespassado) {
+                $p_denis = $divisao+$gastos_denis+$retroativo_denis[0]->valor;
+              }else{
+                $p_denis = $divisao+$gastos_denis;
+              }
+        } else {
+            $p_denis = $divisao+$gastos_denis;
         }
 
-        if ($retroativo_fabiana->isNotEmpty() && $mes_saldo_fabiana < $estemes) {
-          $p_fabiana = $divisao+$gastos_fabiana+$retroativo_fabiana[0]->valor;
-        }else{
-          $p_fabiana = $divisao+$gastos_fabiana;
+        if ($retroativo_fabiana->isNotEmpty()) {
+            $saldo_fabiana = Carbon::parse($retroativo_fabiana[0]->created_at);
+            $mes_saldo_fabiana = $saldo_fabiana->month;
+              if ($retroativo_fabiana->isNotEmpty() && $mes_saldo_fabiana = $mespassado) {
+                $p_fabiana = $divisao+$gastos_fabiana+$retroativo_fabiana[0]->valor;
+              }else{
+                $p_fabiana = $divisao+$gastos_fabiana;
+              }
+        } else {
+            $p_fabiana = $divisao+$gastos_fabiana;
         }
 
-        if ($retroativo_renato->isNotEmpty() && $mes_saldo_renato < $estemes) {
-          $p_renato = $divisao+$gastos_renato+$retroativo_renato[0]->valor;
-        }else{
-          $p_renato = $divisao+$gastos_renato;
+        if ($retroativo_renato->isNotEmpty()) {
+            $saldo_renato = Carbon::parse($retroativo_renato[0]->created_at);
+            $mes_saldo_renato = $saldo_renato->month;
+              if ($retroativo_renato->isNotEmpty() && $mes_saldo_renato = $mespassado) {
+                $p_renato = $divisao+$gastos_renato+$retroativo_renato[0]->valor;
+              }else{
+                $p_renato = $divisao+$gastos_renato;
+              }
+            
+            } else {
+              $p_renato = $divisao+$gastos_renato;
+            }
         }
-      
-      }
+        
 
       if ($p_denis <= $gastos_denis ) {
         $pagar_denis = $gastos_denis-$p_denis;
