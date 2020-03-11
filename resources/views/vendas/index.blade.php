@@ -59,11 +59,27 @@ $a2 = DB::table('vendas')
     ->where('pago', 'S')
     ->sum('custo');
 
-    $a_receber = DB::table('vendas')
+    $ar = DB::table('vendas')
     ->whereMonth('created_at', $mes)
     ->where('pago', 'N')
-    ->where('situacao', 'Agendado')
+    ->where('valor_entrada', '==', '0')
     ->sum('valor_pago');
+
+    $entrada_nao_pago = DB::table('vendas')
+                        ->whereMonth('created_at', $mes)
+                        ->where('pago', 'N')
+                        ->where('valor_entrada', '!=', '0')
+                        ->sum('valor_entrada');
+
+    $entrada_nao_pago_val = DB::table('vendas')
+                        ->whereMonth('created_at', $mes)
+                        ->where('pago', 'N')
+                        ->where('valor_entrada', '!=', '0')
+                        ->sum('valor_pago');
+
+
+    $tot = $entrada_nao_pago_val-$entrada_nao_pago;
+    $a_receber = $ar+$tot;
 
     $qtn_a_fazer = DB::table('vendas')
     ->whereMonth('created_at', $mes)

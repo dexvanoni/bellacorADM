@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('content')
-<div class="container" style="width: 900px">
+<div class="container" style="width: 1000px">
   <form action="{{ route('vendas.store') }}" method="POST">
      @csrf
     <div class="row">
@@ -76,10 +76,10 @@
             ?>
 
             "> 
-            @if ($i->obs == 'DUP' && $i->estoque >= 0)
+            @if ($i->obs == 'DUP' && $i->estoque > 0)
                   (DUP)
             @endif
-            @if (($i->obs == 'DUP' && $i->estoque >= 0) || ($i->obs != 'DUP' && $i->estoque >= 0))
+            @if (($i->obs == 'DUP' && $i->estoque > 0) || ($i->obs != 'DUP' && $i->estoque >= 0))
               {{$i->produto.' (Est.: '.$i->estoque.' - Custo Un.: '}} {{round($media, 2).')'}} 
             @endif
           </option>
@@ -89,8 +89,16 @@
   </div>
   <input type="hidden" name="duplicado" id="duplicado">
   <div class="col-2">
+      <div class="form-group">
+      <label for="vestuario">
+        VESTUÁRIO
+      </label>
+      <input class="form-control" style="margin-top: 10px" type="checkbox" value="" id="vestuario" name="vestuario" onclick="verificar()">      
+      </div>
+  </div>
+  <div class="col-1">
     <div class="form-group">
-      <label for="quantidade">Quantidade</label>
+      <label for="quantidade">Qtn</label>
       <input type="text" class="form-control" id="quantidade" name="quantidade" required>
       </div>
   </div>
@@ -100,7 +108,7 @@
       <input type="text" class="form-control" id="valor_pago" name="valor_pago" required>
       </div>
   </div>
-  <div class="col">
+  <div class="col-2">
     <div class="form-group">
        <label for="dt_entrega">Data para entrega</label>
       <input type="date" class="form-control" id="dt_entrega" name="dt_entrega" required>
@@ -118,10 +126,8 @@
       </div>
   </div>
   </div>  
-
-
-
 </div>
+
 <div class="row">
   <div class="col-1">
     <div class="form-group">
@@ -309,27 +315,69 @@
 }
 
 function qtn(obj) {
-  var seleciona = document.getElementById('produto');
-  var selecao = seleciona[seleciona.selectedIndex].value;
+//var seleciona = document.querySelector('produto');
+//seleciona.addEventListener('change', function() {
+ // var selecao = this.selectedOptions[0];
+  //var texto = selecao.textContent;});
+//var selecao = seleciona.children[seleciona.selectedIndex];
+//var texto = selecao.textContent;
+
+  //var seleciona = document.getElementById('produto').innerHTML;
+  //var selecao = seleciona[seleciona.selectedIndex].value;
+  //var selecao = document.getElementById("vestuario").c
   var div = document.getElementById("quant");
-  //alert(selecao);
-  var aviso = "";
-  $('#duplicado').val(selecao);
+  //alert(texto);
+  //var aviso = "";
+  //$('#duplicado').val(selecao);
   //alert(seleciona);
   //var cliente_new = document.getElementById("nome");
-  if (selecao.match(/TECIDO.*/) || selecao.match(/MALHA.*/)) {
+  //if (texto.match(/TECIDO.*/) || texto.match(/MALHA.*/)) {
+    if ($("#vestuario").prop(":checked")) {
+      alert('marcado');
             document.getElementById("quant").style.display = "block";
-            aviso = "sim";
+            //div.style.display = "block";
+            //aviso = "sim";
             $('#quantidade').css('border', '2px solid #000');
             alert("Na caixa QUANTIDADE inserir a quantidade em KG utilizada para confecção de todas as peças!");
         } else {
+          alert('não marcado');
             document.getElementById("quant").style.display = "none";
+            //div.style.display = "none";
             $('#quantidade').css('border', '1px solid #000');
             //aviso = "não";
             //alert(aviso);
         }
   
 }
+function qtn(obj) {
+  /*var div = document.getElementById("quant");
+    if ($("#vestuario").is(":checked")) {
+      alert('marcado');
+            document.getElementById("quant").style.display = "block";
+            //div.style.display = "block";
+            //aviso = "sim";
+            $('#quantidade').css('border', '2px solid #000');
+            alert("Na caixa QUANTIDADE inserir a quantidade em KG utilizada para confecção de todas as peças!");
+        } else {
+          alert('não marcado');
+            document.getElementById("quant").style.display = "none";
+            //div.style.display = "none";
+            $('#quantidade').css('border', '1px solid #000');
+            //aviso = "não";
+            //alert(aviso);
+        }
+  */
+}
+$('#vestuario').click(function() {
+   if ($("#vestuario").is(":checked")) {
+    document.getElementById("quant").style.display = "block";
+    $('#quantidade').css('border', '2px solid #000');
+    alert("Na caixa QUANTIDADE inserir a quantidade em KG utilizada para confecção de todas as peças!");
+  }else{
+    document.getElementById("quant").style.display = "none";
+    $('#quantidade').css('border', '1px solid #000');
+  }
+});
 </script>
 
 @endsection

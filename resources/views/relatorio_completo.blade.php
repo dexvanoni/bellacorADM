@@ -99,15 +99,27 @@ RELATÓRIO COMPLETO DO MÊS DE {{strtoupper($mes)}}
 		<table border="1">
 			<tr>
 		        <td>DENIS</td>
-		        <td>R$ {{$p_denis}}</td>
+		        <td>R$ {{$p_denis}}
+		        	@if ($ret_denis > 0)
+		        		<i title="Existe valor a ser pago no próximo mês: {{$ret_denis}}" class="fas fa-exclamation-circle" style="color: red"></i>
+		        	@endif
+		        </td>
 		    </tr>
 		    <tr>
 		        <td>FABIANA</td>
-		        <td>R$ {{$p_fabiana}}</td>
+		        <td>R$ {{$p_fabiana}}
+		        	@if ($ret_fabiana > 0)
+		        		<i title="Existe valor a ser pago no próximo mês: {{$ret_fabiana}}" class="fas fa-exclamation-circle" style="color: red"></i>
+		        	@endif
+		        </td>
 		    </tr>
 		    <tr>
 		        <td>RENATO</td>
-		        <td>R$ {{$p_renato}}</td>
+		        <td>R$ {{$p_renato}}
+		        	@if ($ret_renato > 0)
+		        		<i title="Existe valor a ser pago no próximo mês: {{$ret_renato}}" class="fas fa-exclamation-circle" style="color: red"></i>
+		        	@endif
+		        </td>
 		    </tr>
 		</table>	
 	</div>

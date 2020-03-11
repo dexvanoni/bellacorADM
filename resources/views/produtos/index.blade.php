@@ -48,7 +48,7 @@ LISTA DE PRODUTOS
                       }
                     ?>
 
-                  R$ {{round($media, 2)}}
+                  R$ {{$i->valor_custo}}
                 @endif
               </td>
               <td style="width: 10%; text-align: center; color: green; background-color:  <?php if ($i->estoque == 0) echo "red"; ?>" >{{$i->estoque}}</td>

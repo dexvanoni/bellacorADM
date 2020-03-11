@@ -161,7 +161,18 @@ class VendaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    {   
+
+        $estoque_zero = DB::table('produtos')
+                        ->where('estoque', '<=', '0')
+                        ->get();
+
+        //dd($estoque_zero);
+        //exit;
+        foreach ($estoque_zero as $e) {
+
+          DB::table('produtos')->delete($e->id);
+        }
             
         return view('vendas.create');
     }
@@ -183,18 +194,23 @@ $custo_zero = DB::table('produtos')
 
 $prod = Produto::find($request->produto);
 
+ $media = $prod->valor_custo;
+
+
 $este = Produto::find($request->produto);
 
 $request->produto = $prod->produto;
 
-            $total_valor = DB::table('compras')->where('item', $request->produto)->sum('valor_pago');
+            /*$total_valor = DB::table('compras')->where('item', $request->produto)->sum('valor_pago');
               $total_itens = DB::table('compras')->where('item', $request->produto)->sum('quantidade');
               
               if ($total_valor != 0) {
                 $media = $total_valor/$total_itens;
               } else {
                 $media = 'Este produto não foi adquirido';
-              }
+              }*/
+
+
 
         if (!is_null($request->q)) {
             $pecas = $request->q;
@@ -315,6 +331,8 @@ $request->produto = $prod->produto;
         $sobra = $dt->month.'/'.$dt->year;
 
 
+
+
       $vendas = DB::table('vendas')
                 ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
                 ->where('pago', 'S')
@@ -363,6 +381,9 @@ $request->produto = $prod->produto;
                       ->whereIn('quem_pagou', ['DENIS', 'RENATO', 'FABIANA']);
                     })->get();
 
+
+      $divisao = ($vendas->sum('valor_pago')-$todas_compras_pessoas->sum('valor_pago'))/3;
+
       if (!is_null($vendas_naop)) {
         $custo_bruto = $vendas_naop->sum('custo');
       } else {
@@ -407,7 +428,7 @@ $request->produto = $prod->produto;
         $gastos_empresa = 0;
       }
 
-      $retroativo_denis = DB::table('retroativo')
+      /*$retroativo_denis = DB::table('retroativo')
                           ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
                           ->where('quem', 'DENIS')
                           ->get();
@@ -418,15 +439,19 @@ $request->produto = $prod->produto;
       $retroativo_renato = DB::table('retroativo')
                           ->whereBetween('created_at', [$dia_mes_anterior." 00:00:00", $virada])
                           ->where('quem', 'RENATO')
-                          ->get();
+                          ->get();*/
 
                           //echo $retroativo_denis;
                           //exit;                          
 
       if ($faturamento_bruto > 0) {
 
-        $divisao = $faturamento_liquido/3;
+        //$divisao = $faturamento_liquido/3;
+        $p_denis = $divisao+$gastos_denis;
+        $p_fabiana = $divisao+$gastos_fabiana;
+        $p_renato = $divisao+$gastos_renato;
 
+/*
         $estemes = $dt->month;
 
         $mespassado = $estemes-1;
@@ -466,49 +491,53 @@ $request->produto = $prod->produto;
             
             } else {
               $p_renato = $divisao+$gastos_renato;
-            }
+            }*/
+        } else {
+          $p_denis = 0;
+          $p_fabiana = 0;
+          $p_renato = 0;
         }
         
 
-      if ($p_denis <= $gastos_denis ) {
-        $pagar_denis = $gastos_denis-$p_denis;
-          if ($retroativo_denis->isEmpty()) {
+      if ($p_denis <= $gastos_denis  ) {
+        $ret_denis = $gastos_denis-$p_denis;
+          /*if ($retroativo_denis->isEmpty()) {
             $retroativo = new Retroativo;
             $retroativo->quem = 'DENIS';
             $retroativo->valor = $pagar_denis;
             $retroativo->save();
-          }
+          }*/
       } else {
-        $pagar_denis = 0;
+        $ret_denis = 0;
       }
 
       if ($p_fabiana <= $gastos_fabiana ) {
-        $pagar_fabiana = $gastos_fabiana-$p_fabiana;
-          if ($retroativo_fabiana->isEmpty()) {
+        $ret_fabiana = $gastos_fabiana-$p_fabiana;
+          /*if ($retroativo_fabiana->isEmpty()) {
             $retroativo_f = new Retroativo;
             $retroativo_f->quem = 'FABIANA';
             $retroativo_f->valor = $pagar_fabiana;
             $retroativo_f->save();
-          }
+          }*/
       } else {
-        $pagar_fabiana = 0;
+        $ret_fabiana = 0;
       }
 
       if ($p_renato <= $gastos_renato ) {
-        $pagar_renato = $gastos_renato-$p_renato;
-          if ($retroativo_renato->isEmpty()) {
+        $ret_renato = $gastos_renato-$p_renato;
+          /*if ($retroativo_renato->isEmpty()) {
             $retroativo_r = new Retroativo;
             $retroativo_r->quem = 'RENATO';
             $retroativo_r->valor = $pagar_renato;
             $retroativo_r->save();
-          }
+          }*/
       } else {
-        $pagar_renato = 0;
+        $ret_renato = 0;
       }
       
          //echo $pagar_denis;
       //exit;
             
-     return view('relatorio_completo', compact('virada','dia_mes_anterior','faturamento_bruto','faturamento_liquido','porcentagem','custo_liquido','custo_bruto','total_compras','gastos_denis','gastos_fabiana','gastos_renato','gastos_empresa', 'p_denis', 'p_fabiana', 'p_renato', 'p_empresa'));
+     return view('relatorio_completo', compact('virada','dia_mes_anterior','faturamento_bruto','faturamento_liquido','porcentagem','custo_liquido','custo_bruto','total_compras','gastos_denis','gastos_fabiana','gastos_renato','gastos_empresa', 'p_denis', 'p_fabiana', 'p_renato', 'ret_denis', 'ret_fabiana', 'ret_renato' ));
     }
 }
