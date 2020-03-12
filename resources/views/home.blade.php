@@ -114,7 +114,7 @@
                 @endif
               </td>
               <td style="width: 5%; text-align: center;" >
-                @if($i->pago = 'N')
+                @if($i->pago == 'N')
                   <i title="Compra não paga!" class="fas fa-exclamation-triangle" style="color: red"></i>
                   @else
                   <i class="fas fa-check-double" style="color: green"></i>

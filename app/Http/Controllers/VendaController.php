@@ -399,7 +399,7 @@ $request->produto = $prod->produto;
       }
 
       if ($faturamento_bruto > 0) {
-        $faturamento_liquido = $faturamento_bruto-$todas_compras_pessoas->sum('valor_pago');
+        $faturamento_liquido = $faturamento_bruto-$todas_compras->sum('valor_pago');
       } else {
         $faturamento_liquido = 0;
       }
