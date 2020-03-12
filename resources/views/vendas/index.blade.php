@@ -171,7 +171,7 @@ $a2 = DB::table('vendas')
                   <input type="checkbox" value="{{$i->id}}" id="check_recibo" name="check_recibo">
                 @endif
               </td>
-              <td style="width: 30%; text-align: center;" >
+              <td style="width: 30%; text-align: center;" title="{{$i->obs}}">
                 <?php 
                   $media_pago = DB::table('compras')
                                   ->where('item', $i->produto)

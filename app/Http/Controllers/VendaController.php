@@ -321,7 +321,7 @@ $request->produto = $prod->produto;
         $mes = $dt->formatLocalized('%B de %Y');
         
         //$mes = Carbon\Carbon::now();
-        $dia = '11';
+        $dia = '15';
         $virada = Carbon::create($dt->year, $dt->month, $dia, 23, 59, 59);
         $hoje = Carbon::now()->format('Y-m-d');
         $dia_virada = Carbon::create($dt->year, $dt->month, $dia);
@@ -382,7 +382,7 @@ $request->produto = $prod->produto;
                     })->get();
 
 
-      $divisao = ($vendas->sum('valor_pago')-$todas_compras_pessoas->sum('valor_pago'))/3;
+      //$divisao = ($vendas->sum('valor_pago')-$todas_compras_pessoas->sum('valor_pago'))/3;
 
       if (!is_null($vendas_naop)) {
         $custo_bruto = $vendas_naop->sum('custo');
@@ -446,10 +446,13 @@ $request->produto = $prod->produto;
 
       if ($faturamento_bruto > 0) {
 
+        $dividir = $vendas->sum('valor_pago')-$gastos_empresa-$gastos_denis-$gastos_fabiana-$gastos_renato;
+
+
         //$divisao = $faturamento_liquido/3;
-        $p_denis = $divisao+$gastos_denis;
-        $p_fabiana = $divisao+$gastos_fabiana;
-        $p_renato = $divisao+$gastos_renato;
+        $p_denis = ($dividir/3)+$gastos_denis;
+        $p_fabiana = ($dividir/3)+$gastos_fabiana;
+        $p_renato = ($dividir/3)+$gastos_renato;
 
 /*
         $estemes = $dt->month;

@@ -80,7 +80,7 @@
                   (DUP)
             @endif
             @if (($i->obs == 'DUP' && $i->estoque > 0) || ($i->obs != 'DUP' && $i->estoque >= 0))
-              {{$i->produto.' (Est.: '.$i->estoque.' - Custo Un.: '}} {{round($media, 2).')'}} 
+              {{$i->produto.' (Est.: '.$i->estoque.' - Custo Un.: '}} {{round($i->valor_custo, 2).')'}} 
             @endif
           </option>
         @endforeach
